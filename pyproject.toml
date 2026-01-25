@@ -91,4 +91,5 @@ known-third-party = ["fastapi", "pydantic", "starlette"]
 dev = [
     "fastapi>=0.128.0",
     "ruff>=0.14.14",
+    "sqlalchemy[asyncio]>=2.0.46",
 ]
