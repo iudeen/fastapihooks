@@ -8,6 +8,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
 from fasthooks.backends.base_backend import BaseBackend
+from fasthooks.stores.base_store import WebhookSubscription
 
 
 class FasthooksContext(BaseModel):
@@ -29,10 +30,17 @@ class FasthooksContext(BaseModel):
 
 
 class Fasthooks:
-    def __init__(self, backend: BaseBackend, store=None, owner_id: Optional[str] = None):
+    def __init__(
+        self,
+        backend: BaseBackend,
+        store=None,
+        owner_id: Optional[str] = None,
+        subscribers: Optional[Dict[str, list[WebhookSubscription]]] = None,
+    ):
         self.backend = backend
         self.store = store
         self.owner_id = owner_id
+        self.subscribers = subscribers or {}
 
     def hook(
         self,
@@ -84,10 +92,15 @@ class Fasthooks:
 
                     emitted_data = transform(ctx) if transform else ctx.response_payload
 
+                    # Get direct subscribers for this event if available
+                    direct_subscribers = self.subscribers.get(event_name, [])
+
+                    # Let the backend handle all dispatch logic
                     await self.backend.publish(
                         event_name=event_name,
                         payload=emitted_data,
                         owner_id=owner_id,
+                        subscribers=direct_subscribers if direct_subscribers else None,
                     )
 
                 # 2. Offload the emit path to BackgroundTasks when available; otherwise run inline

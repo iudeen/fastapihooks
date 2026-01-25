@@ -1,14 +1,14 @@
 import uuid
 from typing import Any, Iterable, Literal, Optional
 
-from fasthooks.stores.base_store import BaseStore, WebhookSubscription
+from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription, WebhookSubscription
 
 
 class MemoryStore(BaseStore):
     """In-memory store for webhook subscriptions. Suitable for development and BackgroundTasks backend."""
 
     def __init__(self):
-        self._subscriptions: dict[str, WebhookSubscription] = {}
+        self._subscriptions: dict[str, StoredWebhookSubscription] = {}
 
     async def add_subscription(
         self,
@@ -19,7 +19,7 @@ class MemoryStore(BaseStore):
         metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         subscription_id = str(uuid.uuid4())
-        subscription = WebhookSubscription(
+        subscription = StoredWebhookSubscription(
             id=subscription_id,
             event_name=event_name,
             target_url=target_url,
@@ -39,7 +39,7 @@ class MemoryStore(BaseStore):
     async def get_subscriptions(
         self,
         event_name: str,
-    ) -> Iterable[WebhookSubscription]:
+    ) -> Iterable[StoredWebhookSubscription]:
         return [
             sub
             for sub in self._subscriptions.values()
@@ -69,5 +69,5 @@ class MemoryStore(BaseStore):
 
         return True
 
-    async def get_subscription(self, subscription_id: str) -> Optional[WebhookSubscription]:
+    async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:
         return self._subscriptions.get(subscription_id)

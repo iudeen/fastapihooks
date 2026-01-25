@@ -9,7 +9,7 @@ except ImportError:
         "SQLAlchemy is required for SQLStore. Please install it with 'uv add sqlalchemy[asyncio]' or 'pip install sqlalchemy[asyncio]'"
     )
 
-from fasthooks.stores.base_store import BaseStore, WebhookSubscription
+from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription, WebhookSubscription
 
 Base = declarative_base()
 
@@ -26,8 +26,8 @@ class WebhookSubscriptionModel(Base):
     auth_value = Column(String, nullable=True)
     metadata = Column(JSON, default=dict)
 
-    def to_subscription(self) -> WebhookSubscription:
-        return WebhookSubscription(
+    def to_subscription(self) -> StoredWebhookSubscription:
+        return StoredWebhookSubscription(
             id=self.id,
             event_name=self.event_name,
             target_url=self.target_url,
@@ -102,7 +102,7 @@ class SQLStore(BaseStore):
     async def get_subscriptions(
         self,
         event_name: str,
-    ) -> Iterable[WebhookSubscription]:
+    ) -> Iterable[StoredWebhookSubscription]:
         async with self.async_session() as session:
             query = select(WebhookSubscriptionModel).where(
                 WebhookSubscriptionModel.event_name == event_name
@@ -143,7 +143,7 @@ class SQLStore(BaseStore):
             await session.commit()
             return True
 
-    async def get_subscription(self, subscription_id: str) -> Optional[WebhookSubscription]:
+    async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:
         async with self.async_session() as session:
             result = await session.execute(
                 select(WebhookSubscriptionModel).where(

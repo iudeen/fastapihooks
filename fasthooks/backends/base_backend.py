@@ -1,12 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterator, Optional
+from typing import Any, AsyncIterator, Dict, Optional
+
+from fasthooks.stores.base_store import WebhookSubscription
 
 
 class BaseBackend(ABC):
     """Abstract interface for publishing and consuming webhook events."""
 
     @abstractmethod
-    async def publish(self, event_name: str, payload: Any, owner_id: Optional[str]):
+    async def publish(
+        self,
+        event_name: str,
+        payload: Any,
+        owner_id: Optional[str],
+        subscribers: Optional[list[WebhookSubscription]] = None,
+    ):
         """Enqueue or immediately dispatch a webhook event."""
 
     async def consume(self) -> AsyncIterator[Any]:
