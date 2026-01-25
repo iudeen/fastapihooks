@@ -7,6 +7,8 @@ from fastapi import BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
+from fasthooks.backends.base_backend import BaseBackend
+
 
 class FasthooksContext(BaseModel):
     """
@@ -27,7 +29,7 @@ class FasthooksContext(BaseModel):
 
 
 class Fasthooks:
-    def __init__(self, backend, store=None, owner_id: Optional[str] = None):
+    def __init__(self, backend: BaseBackend, store=None, owner_id: Optional[str] = None):
         self.backend = backend
         self.store = store
         self.owner_id = owner_id
