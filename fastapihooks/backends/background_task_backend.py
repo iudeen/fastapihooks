@@ -1,9 +1,9 @@
 from collections.abc import Callable, Coroutine
 from typing import Any
 
-from fasthooks.backends.base_backend import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks.backends.base_backend import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 
 class BackgroundTaskBackend(BaseBackend):

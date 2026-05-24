@@ -1,5 +1,5 @@
 """
-MongoDB Store for Fasthooks
+MongoDB Store for Fastapihooks
 ============================
 A durable subscription store backed by MongoDB using the Motor async driver.
 
@@ -8,8 +8,8 @@ Install dependency:
 
 Usage:
     from examples.mongodb_store import MongoDBStore
-    from fasthooks import Fasthooks
-    from fasthooks.backends import BackgroundTaskBackend
+    from fastapihooks import Fastapihooks
+    from fastapihooks.backends import BackgroundTaskBackend
 
     store = MongoDBStore(mongo_url="mongodb://localhost:27017", database="myapp")
 
@@ -20,7 +20,7 @@ Usage:
             yield
         store.close()
 
-    hooks = Fasthooks(
+    hooks = Fastapihooks(
         backend=BackgroundTaskBackend(signing_secret="your-secret", store=store),
     )
 
@@ -37,7 +37,7 @@ import uuid
 from collections.abc import Iterable
 from typing import Any, Literal
 
-from fasthooks.stores import BaseStore, StoredWebhookSubscription
+from fastapihooks.stores import BaseStore, StoredWebhookSubscription
 
 try:
     from motor.motor_asyncio import AsyncIOMotorClient
@@ -54,14 +54,14 @@ class MongoDBStore(BaseStore):
 
     Args:
         mongo_url:   MongoDB connection URI.
-        database:    Database name (default: fasthooks).
+        database:    Database name (default: fastapihooks).
         collection:  Collection name (default: webhook_subscriptions).
     """
 
     def __init__(
         self,
         mongo_url: str = "mongodb://localhost:27017",
-        database: str = "fasthooks",
+        database: str = "fastapihooks",
         collection: str = "webhook_subscriptions",
     ) -> None:
         self._client = AsyncIOMotorClient(mongo_url)

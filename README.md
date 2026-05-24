@@ -1,6 +1,6 @@
-# 🪝 Fasthooks
+# 🪝 Fastapihooks
 
-Fasthooks is a high-performance, and pluggable webhook management system for FastAPI. It allows you to "webhook-enable" any router with a single decorator, offloading the heavy lifting to a scalable sidecar worker while keeping your API response times near zero.
+Fastapihooks is a high-performance, and pluggable webhook management system for FastAPI. It allows you to "webhook-enable" any router with a single decorator, offloading the heavy lifting to a scalable sidecar worker while keeping your API response times near zero.
 
 ## 📚 Documentation
 - Full multi-page docs: [docs/index.md](docs/index.md)
@@ -8,11 +8,11 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
 ## ✨ Key Features
 - ⚡ Zero-Impact Emission: Uses FastAPI BackgroundTasks to ensure webhook processing never slows down your API flow.
 
-- 🔌 Backend by Design, Extensions by You: Fasthooks ships with `BackgroundTaskBackend` only. Build Redis/Kafka/SQS backends by implementing `BaseBackend`.
+- 🔌 Backend by Design, Extensions by You: Fastapihooks ships with `BackgroundTaskBackend` only. Build Redis/Kafka/SQS backends by implementing `BaseBackend`.
 
 - 🛠️ Sidecar Worker: A dedicated async engine designed for high-concurrency delivery with built-in retries and HMAC signing.
 
-- 🛡️ Secure by Default: Optional HMAC-SHA256 signing — when a `signing_secret` is provided, every delivery includes a verifiable `X-Fasthooks-Signature` header.
+- 🛡️ Secure by Default: Optional HMAC-SHA256 signing — when a `signing_secret` is provided, every delivery includes a verifiable `X-Fastapihooks-Signature` header.
 
 - 📊 Observable: Telemetry support (Logfire, OpenTelemetry, Prometheus) planned for a future release.
 
@@ -21,16 +21,16 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
 ## Quick Start
 1. Install 
     ```bash 
-    pip install fasthooks
+    pip install fastapihooks
     ```
 2. Configure
     ```python
     from contextlib import asynccontextmanager
     from fastapi import FastAPI, BackgroundTasks, Request
-    from fasthooks import Fasthooks
-    from fasthooks.backends import BackgroundTaskBackend
+    from fastapihooks import Fastapihooks
+    from fastapihooks.backends import BackgroundTaskBackend
 
-    hooks = Fasthooks(backend=BackgroundTaskBackend(signing_secret="your-secret"))
+    hooks = Fastapihooks(backend=BackgroundTaskBackend(signing_secret="your-secret"))
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -49,15 +49,15 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
     ```bash 
     # Not required for BackgroundTaskBackend; dispatch runs in FastAPI BackgroundTasks.
     # Use the sidecar only when you implement a queue backend with consume()/ack().
-    fasthooks start --backend-module myapp.backends:custom_backend --store-module myapp.stores:store --signing-secret "your-secret"
+    fastapihooks start --backend-module myapp.backends:custom_backend --store-module myapp.stores:store --signing-secret "your-secret"
     ```
 
 ## Advanced Capabilities 
 
 #### Flexible Transformations
-Don't just dump your API response. Use the FasthooksContext to shape exactly what your subscribers see.
+Don't just dump your API response. Use the FastapihooksContext to shape exactly what your subscribers see.
 ```python
-def my_transformer(ctx: FasthooksContext):
+def my_transformer(ctx: FastapihooksContext):
     return {
         "event": ctx.event_name,
         "order_id": ctx.response_payload["id"],
@@ -92,7 +92,7 @@ Use `BaseStore` to bring your own subscription storage — MongoDB, DynamoDB, Re
 from collections.abc import Iterable
 from typing import Any, Literal
 
-from fasthooks.stores import BaseStore, StoredWebhookSubscription
+from fastapihooks.stores import BaseStore, StoredWebhookSubscription
 
 
 class MyMongoStore(BaseStore):
@@ -115,8 +115,8 @@ Use `BaseBackend` to add your own transport backend while keeping the main libra
 ```python
 from typing import Any
 
-from fasthooks.backends import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
 class MyQueueBackend(BaseBackend):
@@ -140,10 +140,10 @@ class MyQueueBackend(BaseBackend):
 ```
 
 ## Scalability Design
-Fasthooks is designed for horizontal scale. By using an asynchronous backend (eg: Redis Stream Backend), you can run multiple sidecar workers in a Consumer Group. This allows you to process millions of webhooks across a cluster of workers without duplicate deliveries.
+Fastapihooks is designed for horizontal scale. By using an asynchronous backend (eg: Redis Stream Backend), you can run multiple sidecar workers in a Consumer Group. This allows you to process millions of webhooks across a cluster of workers without duplicate deliveries.
 
 ## Security: HMAC Verification
-Fasthooks signs every payload. Your users can verify the authenticity of a webhook using the `X-Fasthooks-Signature` header.
+Fastapihooks signs every payload. Your users can verify the authenticity of a webhook using the `X-Fastapihooks-Signature` header.
 
 The header value is formatted as `sha256=<hex-digest>`, matching the convention used by GitHub, Stripe, and most webhook providers.
 

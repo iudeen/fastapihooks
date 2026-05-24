@@ -1,12 +1,12 @@
-"""Shared fixtures for fasthooks test suite."""
+"""Shared fixtures for fastapihooks test suite."""
 
 
 import httpx
 import pytest
 
-from fasthooks.stores.base_store import WebhookSubscription
-from fasthooks.stores.memory_store import MemoryStore
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks.stores.base_store import WebhookSubscription
+from fastapihooks.stores.memory_store import MemoryStore
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 # ---------------------------------------------------------------------------
 # HTTP mock helpers

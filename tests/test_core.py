@@ -1,4 +1,4 @@
-"""Tests for Fasthooks.hook() decorator and FasthooksContext."""
+"""Tests for Fastapihooks.hook() decorator and FastapihooksContext."""
 
 from datetime import datetime, timezone
 from unittest.mock import AsyncMock
@@ -6,9 +6,9 @@ from unittest.mock import AsyncMock
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.testclient import TestClient
 
-from fasthooks.backends.base_backend import BaseBackend
-from fasthooks.core import Fasthooks, FasthooksContext
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends.base_backend import BaseBackend
+from fastapihooks.core import Fastapihooks, FastapihooksContext
+from fastapihooks.stores.base_store import WebhookSubscription
 
 # ---------------------------------------------------------------------------
 # Minimal stub backend
@@ -35,41 +35,41 @@ class StubBackend(BaseBackend):
 
 
 # ---------------------------------------------------------------------------
-# FasthooksContext
+# FastapihooksContext
 # ---------------------------------------------------------------------------
 
-class TestFasthooksContext:
+class TestFastapihooksContext:
     def test_instantiates_with_required_fields(self):
-        ctx = FasthooksContext(event_name="order.created", owner_id="user-1")
+        ctx = FastapihooksContext(event_name="order.created", owner_id="user-1")
         assert ctx.event_name == "order.created"
         assert ctx.owner_id == "user-1"
 
     def test_timestamp_defaults_to_utc_now(self):
         before = datetime.now(tz=timezone.utc)
-        ctx = FasthooksContext(event_name="evt", owner_id=None)
+        ctx = FastapihooksContext(event_name="evt", owner_id=None)
         after = datetime.now(tz=timezone.utc)
         assert ctx.timestamp.tzinfo is not None
         assert before <= ctx.timestamp <= after
 
     def test_optional_fields_default_to_none(self):
-        ctx = FasthooksContext(event_name="evt", owner_id=None)
+        ctx = FastapihooksContext(event_name="evt", owner_id=None)
         assert ctx.headers is None
         assert ctx.request_payload is None
         assert ctx.response_payload is None
 
     def test_explicit_timestamp_is_used(self):
         ts = datetime(2024, 1, 1, tzinfo=timezone.utc)
-        ctx = FasthooksContext(event_name="evt", owner_id=None, timestamp=ts)
+        ctx = FastapihooksContext(event_name="evt", owner_id=None, timestamp=ts)
         assert ctx.timestamp == ts
 
     def test_headers_can_be_set(self):
-        ctx = FasthooksContext(
+        ctx = FastapihooksContext(
             event_name="evt", owner_id=None, headers={"X-Custom": "value"}
         )
         assert ctx.headers == {"X-Custom": "value"}
 
     def test_response_payload_can_be_set(self):
-        ctx = FasthooksContext(event_name="evt", owner_id=None, response_payload={"k": "v"})
+        ctx = FastapihooksContext(event_name="evt", owner_id=None, response_payload={"k": "v"})
         assert ctx.response_payload == {"k": "v"}
 
 
@@ -90,7 +90,7 @@ def _build_app(
     is_sync: bool = False,
 ) -> tuple[FastAPI, StubBackend]:
     app = FastAPI()
-    fh = Fasthooks(
+    fh = Fastapihooks(
         backend=backend,
         owner_id=global_owner_id,
         subscribers=global_subscribers or {},
@@ -180,10 +180,10 @@ class TestHookDecoratorBasic:
 # ---------------------------------------------------------------------------
 
 class TestTransform:
-    def test_transform_receives_fasthooks_context(self):
+    def test_transform_receives_fastapihooks_context(self):
         received_ctx = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             received_ctx.append(ctx)
             return {"transformed": True}
 
@@ -192,10 +192,10 @@ class TestTransform:
         client = TestClient(app)
         client.post("/items")
         assert len(received_ctx) == 1
-        assert isinstance(received_ctx[0], FasthooksContext)
+        assert isinstance(received_ctx[0], FastapihooksContext)
 
     def test_transform_return_value_is_the_payload(self):
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             return {"custom": "payload"}
 
         backend = StubBackend()
@@ -207,7 +207,7 @@ class TestTransform:
     def test_transform_context_has_response_payload(self):
         seen_payloads = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_payloads.append(ctx.response_payload)
             return ctx.response_payload
 
@@ -220,7 +220,7 @@ class TestTransform:
     def test_transform_context_has_event_name(self):
         seen_event_names = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_event_names.append(ctx.event_name)
             return {}
 
@@ -239,13 +239,13 @@ class TestIncludeHeaders:
     def test_include_headers_populates_ctx_headers(self):
         seen_headers = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_headers.append(ctx.headers)
             return {}
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
 
         @app.post("/items")
         @fh.hook("order.created", include_headers=True, transform=my_transform)
@@ -260,13 +260,13 @@ class TestIncludeHeaders:
     def test_headers_none_when_include_headers_false(self):
         seen_headers = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_headers.append(ctx.headers)
             return {}
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
 
         @app.post("/items")
         @fh.hook("order.created", include_headers=False, transform=my_transform)
@@ -286,13 +286,13 @@ class TestIncludeRequest:
     def test_include_request_populates_ctx_request_payload(self):
         seen_request = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_request.append(ctx.request_payload)
             return {}
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
 
         @app.post("/items")
         @fh.hook("order.created", include_request=True, transform=my_transform)
@@ -307,13 +307,13 @@ class TestIncludeRequest:
     def test_request_payload_none_when_include_request_false(self):
         seen_request = []
 
-        def my_transform(ctx: FasthooksContext):
+        def my_transform(ctx: FastapihooksContext):
             seen_request.append(ctx.request_payload)
             return {}
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
 
         @app.post("/items")
         @fh.hook("order.created", include_request=False, transform=my_transform)
@@ -346,7 +346,7 @@ class TestOwnerID:
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend, owner_id="global")
+        fh = Fastapihooks(backend=backend, owner_id="global")
 
         @app.post("/items")
         @fh.hook("order.created", owner_id_resolver=resolver)
@@ -373,7 +373,7 @@ class TestOwnerID:
 
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend, owner_id="global-tenant")
+        fh = Fastapihooks(backend=backend, owner_id="global-tenant")
 
         @app.post("/items")
         @fh.hook("order.created", owner_id_resolver=resolver)
@@ -395,7 +395,7 @@ class TestBackgroundTasksOffloading:
         background task, not called inline (i.e. the endpoint returns before publish runs)."""
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
 
         @app.post("/items")
         @fh.hook("order.created")
@@ -418,7 +418,7 @@ class TestBackgroundTasksOffloading:
 
 
 # ---------------------------------------------------------------------------
-# Direct subscribers dict on Fasthooks
+# Direct subscribers dict on Fastapihooks
 # ---------------------------------------------------------------------------
 
 class TestDirectSubscribers:
@@ -429,7 +429,7 @@ class TestDirectSubscribers:
         )
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(
+        fh = Fastapihooks(
             backend=backend,
             subscribers={"order.created": [sub]},
         )
@@ -450,7 +450,7 @@ class TestDirectSubscribers:
         )
         backend = StubBackend()
         app = FastAPI()
-        fh = Fasthooks(
+        fh = Fastapihooks(
             backend=backend,
             subscribers={"user.signup": [sub]},
         )
@@ -467,21 +467,21 @@ class TestDirectSubscribers:
 
 
 # ---------------------------------------------------------------------------
-# Fasthooks aclose / context manager
+# Fastapihooks aclose / context manager
 # ---------------------------------------------------------------------------
 
-class TestFasthooksLifecycle:
+class TestFastapihooksLifecycle:
     async def test_aclose_delegates_to_backend(self):
         backend = StubBackend()
         backend.aclose = AsyncMock()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
         await fh.aclose()
         backend.aclose.assert_called_once()
 
     async def test_async_context_manager_calls_aclose(self):
         backend = StubBackend()
         backend.aclose = AsyncMock()
-        fh = Fasthooks(backend=backend)
+        fh = Fastapihooks(backend=backend)
         async with fh:
             pass
         backend.aclose.assert_called_once()

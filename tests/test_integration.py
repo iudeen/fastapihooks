@@ -1,4 +1,4 @@
-"""Integration tests: real FastAPI app + fasthooks decorator end-to-end."""
+"""Integration tests: real FastAPI app + fastapihooks decorator end-to-end."""
 
 import json
 from contextlib import asynccontextmanager
@@ -7,17 +7,17 @@ import httpx
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.testclient import TestClient
 
-from fasthooks import Fasthooks, InMemoryDeadLetterQueue
-from fasthooks.backends import BackgroundTaskBackend
-from fasthooks.stores import MemoryStore, WebhookSubscription
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks import Fastapihooks, InMemoryDeadLetterQueue
+from fastapihooks.backends import BackgroundTaskBackend
+from fastapihooks.stores import MemoryStore, WebhookSubscription
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def make_app(hooks: Fasthooks) -> FastAPI:
-    """Build a minimal FastAPI app wired to the given Fasthooks instance."""
+def make_app(hooks: Fastapihooks) -> FastAPI:
+    """Build a minimal FastAPI app wired to the given Fastapihooks instance."""
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -60,7 +60,7 @@ def recorded_backend(signing_secret: str = "test-secret", store=None):
 class TestBasicHook:
     def test_endpoint_returns_response(self):
         backend, _ = recorded_backend()
-        hooks = Fasthooks(backend=backend)
+        hooks = Fastapihooks(backend=backend)
         app = make_app(hooks)
 
         with TestClient(app) as client:
@@ -72,7 +72,7 @@ class TestBasicHook:
     def test_webhook_delivered_to_direct_subscriber(self):
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
         app = make_app(hooks)
 
         with TestClient(app) as client:
@@ -84,7 +84,7 @@ class TestBasicHook:
     def test_webhook_payload_matches_response(self):
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
         app = make_app(hooks)
 
         with TestClient(app) as client:
@@ -95,7 +95,7 @@ class TestBasicHook:
 
     def test_no_subscriber_no_delivery(self):
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend)
+        hooks = Fastapihooks(backend=backend)
         app = make_app(hooks)
 
         with TestClient(app) as client:
@@ -116,15 +116,15 @@ class TestSignature:
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         secret = "my-signing-secret"
         backend, received = recorded_backend(signing_secret=secret)
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
         app = make_app(hooks)
 
         with TestClient(app) as client:
             client.post("/orders")
 
         req = received[0]
-        assert "x-fasthooks-signature" in req.headers
-        sig_header = req.headers["x-fasthooks-signature"]
+        assert "x-fastapihooks-signature" in req.headers
+        sig_header = req.headers["x-fastapihooks-signature"]
         assert sig_header.startswith("sha256=")
 
         expected = hmac_mod.new(secret.encode(), req.content, hashlib.sha256).hexdigest()
@@ -133,13 +133,13 @@ class TestSignature:
     def test_event_name_header_present(self):
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
         app = make_app(hooks)
 
         with TestClient(app) as client:
             client.post("/orders")
 
-        assert received[0].headers["x-fasthooks-event"] == "order.created"
+        assert received[0].headers["x-fastapihooks-event"] == "order.created"
 
 
 # ---------------------------------------------------------------------------
@@ -148,14 +148,14 @@ class TestSignature:
 
 class TestTransform:
     def test_transform_shapes_payload(self):
-        from fasthooks import FasthooksContext
+        from fastapihooks import FastapihooksContext
 
-        def transformer(ctx: FasthooksContext):
+        def transformer(ctx: FastapihooksContext):
             return {"event": ctx.event_name, "order_id": ctx.response_payload["id"]}
 
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
@@ -192,7 +192,7 @@ class TestStoreIntegration:
         client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
         backend = BackgroundTaskBackend(store=store, signing_secret="secret")
         backend.dispatcher = WebhookDispatcher(store=store, signing_secret="secret", client=client, max_retries=0)
-        hooks = Fasthooks(backend=backend)
+        hooks = Fastapihooks(backend=backend)
         app = make_app(hooks)
 
         import asyncio
@@ -215,7 +215,7 @@ class TestStoreIntegration:
         http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
         backend = BackgroundTaskBackend(store=store, signing_secret="secret")
         backend.dispatcher = WebhookDispatcher(store=store, signing_secret="secret", client=http_client, max_retries=0)
-        hooks = Fasthooks(backend=backend)
+        hooks = Fastapihooks(backend=backend)
         app = make_app(hooks)
 
         import asyncio
@@ -249,7 +249,7 @@ class TestDeadLetterIntegration:
             max_retries=0,
             on_failure=dlq,
         )
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
         app = make_app(hooks)
 
         with TestClient(app) as client_app:
@@ -267,7 +267,7 @@ class TestSyncEndpoint:
     def test_sync_endpoint_is_wrapped_correctly(self):
         sub = WebhookSubscription(event_name="item.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"item.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"item.created": [sub]})
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
@@ -297,17 +297,17 @@ class TestSyncEndpoint:
 
 class TestIncludeOptions:
     def test_include_headers_populates_ctx(self):
-        from fasthooks import FasthooksContext
+        from fastapihooks import FastapihooksContext
 
-        captured_ctx: list[FasthooksContext] = []
+        captured_ctx: list[FastapihooksContext] = []
 
-        def transformer(ctx: FasthooksContext):
+        def transformer(ctx: FastapihooksContext):
             captured_ctx.append(ctx)
             return ctx.response_payload
 
         sub = WebhookSubscription(event_name="order.created", target_url="https://recv.example.com/hook")
         backend, received = recorded_backend()
-        hooks = Fasthooks(backend=backend, subscribers={"order.created": [sub]})
+        hooks = Fastapihooks(backend=backend, subscribers={"order.created": [sub]})
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):

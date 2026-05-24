@@ -1,10 +1,10 @@
 # 07. Security and Reliability
 
 ## Signature Format
-Fasthooks signs payloads with HMAC-SHA256 when a signing secret is configured.
+Fastapihooks signs payloads with HMAC-SHA256 when a signing secret is configured.
 
 Header:
-- X-Fasthooks-Signature: sha256=<hex_digest>
+- X-Fastapihooks-Signature: sha256=<hex_digest>
 
 ## Verification Example
 ```python
@@ -29,7 +29,7 @@ Dispatcher behavior:
 
 Configure via `BackgroundTaskBackend` constructor:
 ```python
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks.backends import BackgroundTaskBackend
 
 backend = BackgroundTaskBackend(
     signing_secret="your-secret",
@@ -46,8 +46,8 @@ Callback signature: `async on_failure(subscription, payload, error)`
 
 ### Built-in: InMemoryDeadLetterQueue
 ```python
-from fasthooks import InMemoryDeadLetterQueue
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks import InMemoryDeadLetterQueue
+from fastapihooks.backends import BackgroundTaskBackend
 
 dlq = InMemoryDeadLetterQueue(maxlen=1000)
 

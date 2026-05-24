@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from typing import Any
 
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
 class BaseBackend(ABC):
-    """Extension contract for fasthooks transport backends.
+    """Extension contract for fastapihooks transport backends.
 
-    Fasthooks intentionally ships with only `BackgroundTaskBackend` by default.
+    Fastapihooks intentionally ships with only `BackgroundTaskBackend` by default.
     Additional transports (Redis, Kafka, SQS, etc.) should be implemented by
     users or external packages by subclassing this base class.
     """

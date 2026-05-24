@@ -51,12 +51,12 @@ Use SQLStore when:
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from examples.mongodb_store import MongoDBStore
-from fasthooks import Fasthooks
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks import Fastapihooks
+from fastapihooks.backends import BackgroundTaskBackend
 
 store = MongoDBStore(mongo_url="mongodb://localhost:27017", database="myapp")
 backend = BackgroundTaskBackend(signing_secret="your-secret", store=store)
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

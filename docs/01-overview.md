@@ -1,12 +1,12 @@
 # 01. Overview
 
-## What Fasthooks Is
-Fasthooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.
+## What Fastapihooks Is
+Fastapihooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.
 
 Core idea:
 
 1. Your API route runs business logic.
-2. Fasthooks captures event context.
+2. Fastapihooks captures event context.
 3. Webhook delivery is offloaded through a backend path.
 
 ## Design Principles
@@ -23,7 +23,7 @@ Core idea:
 - Optional sidecar engine for queue-style backends.
 
 ## Mental Model
-Use Fasthooks as a pipeline:
+Use Fastapihooks as a pipeline:
 - Emit phase in your API process.
 - Resolve subscribers from direct list or store.
 - Deliver to endpoints with signing/auth/retry behavior.

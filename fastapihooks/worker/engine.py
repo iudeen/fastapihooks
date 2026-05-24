@@ -3,13 +3,13 @@ import logging
 
 import typer
 
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 logger = logging.getLogger(__name__)
-app = typer.Typer(help="Fasthooks webhook delivery sidecar engine.")
+app = typer.Typer(help="Fastapihooks webhook delivery sidecar engine.")
 
 
-class FasthooksEngine:
+class FastapihooksEngine:
     """Main execution engine for the webhook delivery sidecar.
 
     Consumes events from a backend and dispatches them via a dispatcher.
@@ -42,7 +42,7 @@ class FasthooksEngine:
 
         Consumes events from the backend, dispatches them, and acknowledges completion.
         """
-        logger.info("Starting Fasthooks engine...")
+        logger.info("Starting Fastapihooks engine...")
         try:
             async for event in self.backend.consume():
                 logger.debug(f"Processing event: {event.event_name}")
@@ -58,7 +58,7 @@ class FasthooksEngine:
                     # Continue processing other events on error
         finally:
             await self.dispatcher.aclose()
-            logger.info("Fasthooks engine stopped.")
+            logger.info("Fastapihooks engine stopped.")
 
 
 @app.command()
@@ -79,7 +79,7 @@ def start(
         "INFO", help="Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
     ),
 ) -> None:
-    """Start the Fasthooks webhook delivery sidecar.
+    """Start the Fastapihooks webhook delivery sidecar.
 
     Requires module paths to backend and store instances, plus a signing secret.
     """
@@ -98,7 +98,7 @@ def start(
         raise typer.Exit(code=1) from None
 
     # Create and run engine
-    engine = FasthooksEngine(
+    engine = FastapihooksEngine(
         backend=backend,
         store=store,
         signing_secret=signing_secret,

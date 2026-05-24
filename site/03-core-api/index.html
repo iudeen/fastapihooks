@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Fasthooks is a high-performance, and pluggable webhook management system for FastAPI">
+        <meta name="description" content="Fastapihooks is a high-performance, and pluggable webhook management system for FastAPI">
       
       
         <meta name="author" content="Irfanuddin">
@@ -27,7 +27,7 @@
     
     
       
-        <title>03. Core API - Fasthooks</title>
+        <title>03. Core API - Fastapihooks</title>
       
     
     
@@ -99,7 +99,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="./.." title="Fasthooks" class="md-header__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-header__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
@@ -113,7 +113,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Fasthooks
+            Fastapihooks
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -198,13 +198,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="./.." title="Fasthooks" class="md-nav__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-nav__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    Fasthooks
+    Fastapihooks
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -223,7 +223,7 @@
   <span class="md-ellipsis">
     
   
-  Fasthooks Documentation
+  Fastapihooks Documentation
 
     
   </span>
@@ -353,10 +353,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fasthooks" class="md-nav__link">
+  <a href="#fastapihooks" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Fasthooks
+        Fastapihooks
       </span>
     </span>
   </a>
@@ -392,10 +392,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fasthookscontext" class="md-nav__link">
+  <a href="#fastapihookscontext" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        FasthooksContext
+        FastapihooksContext
       </span>
     </span>
   </a>
@@ -670,10 +670,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fasthooks" class="md-nav__link">
+  <a href="#fastapihooks" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Fasthooks
+        Fastapihooks
       </span>
     </span>
   </a>
@@ -709,10 +709,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fasthookscontext" class="md-nav__link">
+  <a href="#fastapihookscontext" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        FasthooksContext
+        FastapihooksContext
       </span>
     </span>
   </a>
@@ -754,7 +754,7 @@
                   
 
 <h1 id="03-core-api">03. Core API<a class="headerlink" href="#03-core-api" title="Permanent link">&para;</a></h1>
-<h2 id="fasthooks">Fasthooks<a class="headerlink" href="#fasthooks" title="Permanent link">&para;</a></h2>
+<h2 id="fastapihooks">Fastapihooks<a class="headerlink" href="#fastapihooks" title="Permanent link">&para;</a></h2>
 <p>Main entry point that wires your backend, optional store, owner scope, and direct subscribers.</p>
 <p>Constructor parameters:
 - backend: BaseBackend implementation.
@@ -768,7 +768,7 @@
 <p><code>hook(event_name, include_headers=False, include_request=False, include_response=True, transform=None, owner_id_resolver=None)</code></p>
 <p>Behavior:
 1. Calls original endpoint (sync or async).
-2. Builds FasthooksContext.
+2. Builds FastapihooksContext.
 3. Resolves payload through optional transform.
 4. Publishes using backend.publish(...).
 5. Uses FastAPI BackgroundTasks when provided.</p>
@@ -797,7 +797,7 @@ the body is not also consumed by a Pydantic model parameter.</strong></p>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="o">...</span>
 </span></code></pre></div></p>
 <p>If you only need request <em>headers</em>, use <code>include_headers=True</code> instead — that is always safe.</p>
-<h2 id="fasthookscontext">FasthooksContext<a class="headerlink" href="#fasthookscontext" title="Permanent link">&para;</a></h2>
+<h2 id="fastapihookscontext">FastapihooksContext<a class="headerlink" href="#fastapihookscontext" title="Permanent link">&para;</a></h2>
 <p>Fields:
 - event_name
 - owner_id

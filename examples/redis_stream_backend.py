@@ -1,5 +1,5 @@
 """
-Redis Streams Backend for Fasthooks
+Redis Streams Backend for Fastapihooks
 ====================================
 A queue-backed transport that uses Redis Streams with consumer groups for
 reliable, horizontally-scalable webhook delivery.
@@ -8,17 +8,17 @@ Install dependency:
     pip install redis[asyncio]
 
 Usage with the sidecar engine:
-    fasthooks start \
+    fastapihooks start \
         --backend-module examples.redis_stream_backend:redis_backend \
         --store-module myapp.stores:store \
         --signing-secret "your-secret"
 
 Or wire it up in your FastAPI app for the emit path:
     from examples.redis_stream_backend import RedisStreamBackend
-    from fasthooks import Fasthooks
+    from fastapihooks import Fastapihooks
 
     backend = RedisStreamBackend(redis_url="redis://localhost:6379")
-    hooks = Fasthooks(backend=backend)
+    hooks = Fastapihooks(backend=backend)
 
 Design notes:
 - publish()  → XADD to a Redis Stream.
@@ -36,8 +36,8 @@ from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Any
 
-from fasthooks.backends import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ class RedisStreamBackend(BaseBackend):
 
     Args:
         redis_url:       Redis connection URL (default: redis://localhost:6379).
-        stream_key:      Name of the Redis Stream (default: fasthooks:events).
+        stream_key:      Name of the Redis Stream (default: fastapihooks:events).
         consumer_group:  Consumer group name shared across all workers.
         consumer_name:   Unique name for this worker instance.
         block_ms:        How long XREADGROUP blocks waiting for new messages (ms).
@@ -78,8 +78,8 @@ class RedisStreamBackend(BaseBackend):
     def __init__(
         self,
         redis_url: str = "redis://localhost:6379",
-        stream_key: str = "fasthooks:events",
-        consumer_group: str = "fasthooks-workers",
+        stream_key: str = "fastapihooks:events",
+        consumer_group: str = "fastapihooks-workers",
         consumer_name: str = "worker-1",
         block_ms: int = 5000,
         batch_size: int = 10,
@@ -125,7 +125,7 @@ class RedisStreamBackend(BaseBackend):
         Yield events from the stream via consumer group.
 
         Blocks up to block_ms waiting for new messages, then loops.
-        The caller (FasthooksEngine) is responsible for calling ack() after
+        The caller (FastapihooksEngine) is responsible for calling ack() after
         successful dispatch.
         """
         client = await self._get_client()

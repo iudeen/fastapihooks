@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import Any
 
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
 class BaseDispatcher(ABC):

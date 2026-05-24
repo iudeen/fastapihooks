@@ -1,8 +1,8 @@
 """Tests for MemoryStore."""
 
 
-from fasthooks.stores.base_store import StoredWebhookSubscription
-from fasthooks.stores.memory_store import MemoryStore
+from fastapihooks.stores.base_store import StoredWebhookSubscription
+from fastapihooks.stores.memory_store import MemoryStore
 
 
 class TestAddSubscription:

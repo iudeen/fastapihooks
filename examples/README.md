@@ -1,6 +1,6 @@
-# Fasthooks Examples
+# Fastapihooks Examples
 
-Reference implementations for extending Fasthooks with external transports and stores.
+Reference implementations for extending Fastapihooks with external transports and stores.
 These files are ready to copy into your own project and adapt.
 
 ## redis_stream_backend.py
@@ -32,19 +32,19 @@ Your API  ──► publish() ──► XADD ──► Redis Stream
 **Quick start:**
 ```python
 from examples.redis_stream_backend import RedisStreamBackend
-from fasthooks import Fasthooks
+from fastapihooks import Fastapihooks
 
 backend = RedisStreamBackend(
     redis_url="redis://localhost:6379",
     consumer_group="prod-workers",
     consumer_name="worker-1",   # unique per worker instance
 )
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 ```
 
 **Run the sidecar worker:**
 ```bash
-fasthooks start \
+fastapihooks start \
     --backend-module examples.redis_stream_backend:redis_backend \
     --store-module myapp.stores:store \
     --signing-secret "your-secret"
@@ -68,8 +68,8 @@ A MongoDB subscription store using the Motor async driver.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from examples.mongodb_store import MongoDBStore
-from fasthooks import Fasthooks
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks import Fastapihooks
+from fastapihooks.backends import BackgroundTaskBackend
 
 store = MongoDBStore(
     mongo_url="mongodb://localhost:27017",
@@ -77,7 +77,7 @@ store = MongoDBStore(
 )
 
 backend = BackgroundTaskBackend(signing_secret="your-secret", store=store)
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

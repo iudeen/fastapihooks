@@ -1,6 +1,6 @@
 ---
-applyTo: "fasthooks/**/*.py"
-description: "Use when editing Python source files in fasthooks; enforce lightweight core and extension-first backend design."
+applyTo: "fastapihooks/**/*.py"
+description: "Use when editing Python source files in fastapihooks; enforce lightweight core and extension-first backend design."
 ---
 
 # Python File Instructions

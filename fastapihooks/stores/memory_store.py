@@ -2,7 +2,7 @@ import uuid
 from collections.abc import Iterable
 from typing import Any, Literal
 
-from fasthooks.stores.base_store import (
+from fastapihooks.stores.base_store import (
     BaseStore,
     StoredWebhookSubscription,
 )

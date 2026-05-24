@@ -1,11 +1,11 @@
 # 10. Concepts and Architecture
 
-This page explains how Fasthooks is built from the inside out.
+This page explains how Fastapihooks is built from the inside out.
 No prior framework knowledge required — if you know what an API is, you can follow along.
 
 ---
 
-## The Problem Fasthooks Solves
+## The Problem Fastapihooks Solves
 
 Imagine you run a shop. When a customer places an order, you need to:
 
@@ -15,7 +15,7 @@ Imagine you run a shop. When a customer places an order, you need to:
 If you notify all five systems *before* responding to the customer, the response takes forever.
 If you notify them *after*, you have to make sure it actually happens — reliably.
 
-That is exactly the problem webhooks solve, and Fasthooks is a framework that handles the "notify after" part cleanly.
+That is exactly the problem webhooks solve, and Fastapihooks is a framework that handles the "notify after" part cleanly.
 
 ---
 
@@ -80,12 +80,12 @@ Think of it as a listener attached to your function's exit door.
 
 ---
 
-### 2. The Context (`FasthooksContext`)
+### 2. The Context (`FastapihooksContext`)
 
-Before dispatching anything, Fasthooks packages what happened into a context object.
+Before dispatching anything, Fastapihooks packages what happened into a context object.
 
 ```python
-class FasthooksContext:
+class FastapihooksContext:
     event_name: str          # e.g. "order.created"
     owner_id: str | None     # e.g. a tenant or user ID
     timestamp: datetime      # when the event happened
@@ -97,7 +97,7 @@ class FasthooksContext:
 You can use this context to transform what gets sent to subscribers.
 
 ```python
-def my_transform(ctx: FasthooksContext):
+def my_transform(ctx: FastapihooksContext):
     return {
         "event": ctx.event_name,
         "order_id": ctx.response_payload["id"],
@@ -112,7 +112,7 @@ Without a transform, the raw response payload is sent as-is.
 
 The backend decides **how** the event gets published.
 
-Fasthooks ships with one backend built in: `BackgroundTaskBackend`.
+Fastapihooks ships with one backend built in: `BackgroundTaskBackend`.
 
 ```
 BackgroundTaskBackend
@@ -147,7 +147,7 @@ Built-in options:
 | `MemoryStore` | Local development, tests, one-off scripts |
 | `SQLStore` | Production apps with a relational database |
 
-The store is optional. If you pass subscribers directly to `Fasthooks(subscribers={...})`, no store is needed at all.
+The store is optional. If you pass subscribers directly to `Fastapihooks(subscribers={...})`, no store is needed at all.
 
 ---
 
@@ -184,7 +184,7 @@ Here is what happens every time a decorated endpoint receives a request:
         │
 5.  BackgroundTasks fires the emit task (non-blocking)
         │
-6.  FasthooksContext is built from response + optional request data
+6.  FastapihooksContext is built from response + optional request data
         │
 7.  transform(ctx) runs if provided, else response_payload is used directly
         │
@@ -223,7 +223,7 @@ Your FastAPI app                  Sidecar Worker Process
 You start it with:
 
 ```bash
-fasthooks start \
+fastapihooks start \
   --backend-module myapp.backends:redis_backend \
   --store-module myapp.stores:sql_store \
   --signing-secret "secret"
@@ -235,7 +235,7 @@ This separation means your API process and delivery process can scale independen
 
 ## Pluggability — Why Each Layer Is Separate
 
-Fasthooks keeps each layer independent by design.
+Fastapihooks keeps each layer independent by design.
 
 ```
 Layer        | Swappable Via        | Default
@@ -254,7 +254,7 @@ You can use any combination:
 
 ---
 
-## What Fasthooks Does NOT Do
+## What Fastapihooks Does NOT Do
 
 Knowing the boundaries helps you design around them correctly.
 
@@ -273,7 +273,7 @@ Knowing the boundaries helps you design around them correctly.
 | Concept | One-Line Explanation |
 |---|---|
 | `@hooks.hook` | Attaches webhook emission to any FastAPI route |
-| `FasthooksContext` | The event snapshot passed to your transform function |
+| `FastapihooksContext` | The event snapshot passed to your transform function |
 | `BaseBackend` | The interface for how events are published/consumed |
 | `BackgroundTaskBackend` | The built-in backend — runs inside FastAPI, no extra process |
 | `BaseStore` | The interface for subscription storage |

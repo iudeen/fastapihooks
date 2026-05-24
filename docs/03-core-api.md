@@ -1,6 +1,6 @@
 # 03. Core API
 
-## Fasthooks
+## Fastapihooks
 Main entry point that wires your backend, optional store, owner scope, and direct subscribers.
 
 Constructor parameters:
@@ -18,7 +18,7 @@ Lifecycle:
 
 Behavior:
 1. Calls original endpoint (sync or async).
-2. Builds FasthooksContext.
+2. Builds FastapihooksContext.
 3. Resolves payload through optional transform.
 4. Publishes using backend.publish(...).
 5. Uses FastAPI BackgroundTasks when provided.
@@ -57,7 +57,7 @@ async def create_order(request: Request, body: OrderIn, background_tasks: Backgr
 
 If you only need request *headers*, use `include_headers=True` instead — that is always safe.
 
-## FasthooksContext
+## FastapihooksContext
 Fields:
 - event_name
 - owner_id

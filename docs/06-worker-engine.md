@@ -5,7 +5,7 @@ The sidecar engine is for queue-backed custom backends that expose consume and a
 
 BackgroundTaskBackend does not use this loop.
 
-## FasthooksEngine Flow
+## FastapihooksEngine Flow
 1. Consume event from backend.
 2. Dispatch to matching subscribers.
 3. Acknowledge via backend.ack(event.id).
@@ -14,7 +14,7 @@ BackgroundTaskBackend does not use this loop.
 ## CLI
 Entry point command:
 ```bash
-fasthooks start --backend-module myapp.backends:backend --store-module myapp.stores:store --signing-secret "secret"
+fastapihooks start --backend-module myapp.backends:backend --store-module myapp.stores:store --signing-secret "secret"
 ```
 
 Main options:

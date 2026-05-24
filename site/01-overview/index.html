@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Fasthooks is a high-performance, and pluggable webhook management system for FastAPI">
+        <meta name="description" content="Fastapihooks is a high-performance, and pluggable webhook management system for FastAPI">
       
       
         <meta name="author" content="Irfanuddin">
@@ -27,7 +27,7 @@
     
     
       
-        <title>01. Overview - Fasthooks</title>
+        <title>01. Overview - Fastapihooks</title>
       
     
     
@@ -99,7 +99,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="./.." title="Fasthooks" class="md-header__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-header__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
@@ -113,7 +113,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Fasthooks
+            Fastapihooks
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -198,13 +198,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="./.." title="Fasthooks" class="md-nav__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-nav__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    Fasthooks
+    Fastapihooks
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -223,7 +223,7 @@
   <span class="md-ellipsis">
     
   
-  Fasthooks Documentation
+  Fastapihooks Documentation
 
     
   </span>
@@ -301,10 +301,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-fasthooks-is" class="md-nav__link">
+  <a href="#what-fastapihooks-is" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        What Fasthooks Is
+        What Fastapihooks Is
       </span>
     </span>
   </a>
@@ -653,10 +653,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-fasthooks-is" class="md-nav__link">
+  <a href="#what-fastapihooks-is" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        What Fasthooks Is
+        What Fastapihooks Is
       </span>
     </span>
   </a>
@@ -720,12 +720,12 @@
                   
 
 <h1 id="01-overview">01. Overview<a class="headerlink" href="#01-overview" title="Permanent link">&para;</a></h1>
-<h2 id="what-fasthooks-is">What Fasthooks Is<a class="headerlink" href="#what-fasthooks-is" title="Permanent link">&para;</a></h2>
-<p>Fasthooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.</p>
+<h2 id="what-fastapihooks-is">What Fastapihooks Is<a class="headerlink" href="#what-fastapihooks-is" title="Permanent link">&para;</a></h2>
+<p>Fastapihooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.</p>
 <p>Core idea:</p>
 <ol>
 <li>Your API route runs business logic.</li>
-<li>Fasthooks captures event context.</li>
+<li>Fastapihooks captures event context.</li>
 <li>Webhook delivery is offloaded through a backend path.</li>
 </ol>
 <h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
@@ -744,7 +744,7 @@
 <li>Optional sidecar engine for queue-style backends.</li>
 </ul>
 <h2 id="mental-model">Mental Model<a class="headerlink" href="#mental-model" title="Permanent link">&para;</a></h2>
-<p>Use Fasthooks as a pipeline:
+<p>Use Fastapihooks as a pipeline:
 - Emit phase in your API process.
 - Resolve subscribers from direct list or store.
 - Deliver to endpoints with signing/auth/retry behavior.</p>
@@ -787,7 +787,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="./.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Fasthooks Documentation">
+          <a href="./.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Fastapihooks Documentation">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -797,7 +797,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Fasthooks Documentation
+                Fastapihooks Documentation
               </div>
             </div>
           </a>

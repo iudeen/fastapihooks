@@ -106,7 +106,7 @@ class TestConsume:
         backend, client = _make_backend()
         payload = {"id": "ord_1"}
         client.xreadgroup.side_effect = [
-            [("fasthooks:events", [("1-0", {"event_name": "order.created", "payload": json.dumps(payload), "owner_id": ""})])],
+            [("fastapihooks:events", [("1-0", {"event_name": "order.created", "payload": json.dumps(payload), "owner_id": ""})])],
             [],  # second call returns nothing → generator yields nothing more
         ]
 
@@ -122,7 +122,7 @@ class TestConsume:
     async def test_empty_owner_id_becomes_none(self):
         backend, client = _make_backend()
         client.xreadgroup.side_effect = [
-            [("fasthooks:events", [("2-0", {"event_name": "e", "payload": "{}", "owner_id": ""})])],
+            [("fastapihooks:events", [("2-0", {"event_name": "e", "payload": "{}", "owner_id": ""})])],
             [],
         ]
         gen = backend.consume()
@@ -133,7 +133,7 @@ class TestConsume:
     async def test_non_empty_owner_id_is_preserved(self):
         backend, client = _make_backend()
         client.xreadgroup.side_effect = [
-            [("fasthooks:events", [("3-0", {"event_name": "e", "payload": "{}", "owner_id": "tenant-7"})])],
+            [("fastapihooks:events", [("3-0", {"event_name": "e", "payload": "{}", "owner_id": "tenant-7"})])],
             [],
         ]
         gen = backend.consume()
@@ -144,7 +144,7 @@ class TestConsume:
     async def test_uses_configured_consumer_group_and_name(self):
         backend, client = _make_backend(consumer_group="grp", consumer_name="w2")
         client.xreadgroup.side_effect = [
-            [("fasthooks:events", [("1-0", {"event_name": "e", "payload": "{}", "owner_id": ""})])],
+            [("fastapihooks:events", [("1-0", {"event_name": "e", "payload": "{}", "owner_id": ""})])],
             [],
         ]
         gen = backend.consume()

@@ -12,7 +12,7 @@
 
 ## Recommended Agent Workflow
 1. Read AGENTS.md before edits.
-2. Apply file-scoped instructions when editing Python under fasthooks.
+2. Apply file-scoped instructions when editing Python under fastapihooks.
 3. Keep changes small and verifiable.
 4. Run diagnostics and one smoke check after meaningful edits.
 

@@ -1,5 +1,5 @@
-# Fasthooks Documentation 
-Welcome to documentation for Fasthooks.
+# Fastapihooks Documentation 
+Welcome to documentation for Fastapihooks.
 
 ## Navigation
 - [01-overview.md](01-overview.md) - Product overview and mental model.
@@ -11,7 +11,7 @@ Welcome to documentation for Fasthooks.
 - [07-security-reliability.md](07-security-reliability.md) - Signatures, retries, and failure handling.
 - [08-agent-playbook.md](08-agent-playbook.md) - Agent-agnostic repo workflow.
 - [09-roadmap.md](09-roadmap.md) - Planned integrations and recommended milestones.
-- [10-architecture.md](10-architecture.md) - Deep-dive on how Fasthooks works internally (newbie-friendly).
+- [10-architecture.md](10-architecture.md) - Deep-dive on how Fastapihooks works internally (newbie-friendly).
 - [11-extending.md](11-extending.md) - How to build and package custom backends and stores.
 
 ## Documentation Scope

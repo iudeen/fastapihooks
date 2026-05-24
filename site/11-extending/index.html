@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Fasthooks is a high-performance, and pluggable webhook management system for FastAPI">
+        <meta name="description" content="Fastapihooks is a high-performance, and pluggable webhook management system for FastAPI">
       
       
         <meta name="author" content="Irfanuddin">
@@ -25,7 +25,7 @@
     
     
       
-        <title>11. Building Extensions - Fasthooks</title>
+        <title>11. Building Extensions - Fastapihooks</title>
       
     
     
@@ -97,7 +97,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="./.." title="Fasthooks" class="md-header__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-header__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
@@ -111,7 +111,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Fasthooks
+            Fastapihooks
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -196,13 +196,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="./.." title="Fasthooks" class="md-nav__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-nav__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    Fasthooks
+    Fastapihooks
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -221,7 +221,7 @@
   <span class="md-ellipsis">
     
   
-  Fasthooks Documentation
+  Fastapihooks Documentation
 
     
   </span>
@@ -984,7 +984,7 @@
                   
 
 <h1 id="11-building-extensions">11. Building Extensions<a class="headerlink" href="#11-building-extensions" title="Permanent link">&para;</a></h1>
-<p>This page explains how to build your own Fasthooks backends and stores as reusable
+<p>This page explains how to build your own Fastapihooks backends and stores as reusable
 packages or project-local modules. The reference implementations in <code>examples/</code> follow
 these patterns exactly.</p>
 <hr />
@@ -1028,8 +1028,8 @@ a separate sidecar worker can consume and deliver them.</p>
 </table>
 <h3 id="minimal-template">Minimal template<a class="headerlink" href="#minimal-template" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseBackend</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.stores.base_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebhookSubscription</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseBackend</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.stores.base_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebhookSubscription</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyBackend</span><span class="p">(</span><span class="n">BaseBackend</span><span class="p">):</span>
@@ -1052,8 +1052,8 @@ a separate sidecar worker can consume and deliver them.</p>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseBackend</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.stores.base_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebhookSubscription</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseBackend</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.stores.base_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebhookSubscription</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nd">@dataclass</span>
@@ -1091,17 +1091,17 @@ a separate sidecar worker can consume and deliver them.</p>
 </span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </span></code></pre></div>
 <blockquote>
-<p><strong>Event object shape:</strong> The sidecar engine (<code>FasthooksEngine</code>) reads <code>.id</code>,
+<p><strong>Event object shape:</strong> The sidecar engine (<code>FastapihooksEngine</code>) reads <code>.id</code>,
 <code>.event_name</code>, and <code>.payload</code> from each yielded object. Your dataclass or model
 must expose these three attributes.</p>
 </blockquote>
 <h3 id="wiring-it-into-a-fastapi-app">Wiring it into a FastAPI app<a class="headerlink" href="#wiring-it-into-a-fastapi-app" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">asynccontextmanager</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">BackgroundTasks</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fasthooks</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fastapihooks</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">MyQueueBackend</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">hooks</span> <span class="o">=</span> <span class="n">Fasthooks</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">hooks</span> <span class="o">=</span> <span class="n">Fastapihooks</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nd">@asynccontextmanager</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">lifespan</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">FastAPI</span><span class="p">):</span>
@@ -1116,7 +1116,7 @@ must expose these three attributes.</p>
 </span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;ord_123&quot;</span><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="running-the-sidecar-worker">Running the sidecar worker<a class="headerlink" href="#running-the-sidecar-worker" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fasthooks<span class="w"> </span>start<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fastapihooks<span class="w"> </span>start<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span>--backend-module<span class="w"> </span>myapp.backends:my_backend_instance<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span>--store-module<span class="w"> </span>myapp.stores:my_store_instance<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span>--signing-secret<span class="w"> </span><span class="s2">&quot;your-secret&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -1179,7 +1179,7 @@ Build a custom store to use MongoDB, DynamoDB, Redis, or any other data layer.</
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseStore</span><span class="p">,</span> <span class="n">StoredWebhookSubscription</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseStore</span><span class="p">,</span> <span class="n">StoredWebhookSubscription</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyStore</span><span class="p">(</span><span class="n">BaseStore</span><span class="p">):</span>
@@ -1238,12 +1238,12 @@ your store directly.</p>
 <h3 id="wiring-into-the-app">Wiring into the app<a class="headerlink" href="#wiring-into-the-app" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">asynccontextmanager</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fasthooks</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackgroundTaskBackend</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fastapihooks</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackgroundTaskBackend</span>
 </span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
 </span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">store</span> <span class="o">=</span> <span class="n">MyStore</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">BackgroundTaskBackend</span><span class="p">(</span><span class="n">signing_secret</span><span class="o">=</span><span class="s2">&quot;your-secret&quot;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">hooks</span> <span class="o">=</span> <span class="n">Fasthooks</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">hooks</span> <span class="o">=</span> <span class="n">Fastapihooks</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
 </span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="nd">@asynccontextmanager</span>
 </span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">lifespan</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">FastAPI</span><span class="p">):</span>
@@ -1288,14 +1288,14 @@ for complete worked examples of this pattern.</p>
 <p>Extensions can live in your application codebase or be published as standalone
 packages. If publishing to PyPI:</p>
 <ol>
-<li>Name the package <code>fasthooks-&lt;transport&gt;</code> (e.g., <code>fasthooks-redis</code>, <code>fasthooks-sqs</code>).</li>
-<li>Declare <code>fasthooks</code> as a dependency without pinning the minor version: <code>fasthooks&gt;=0.1</code>.</li>
+<li>Name the package <code>fastapihooks-&lt;transport&gt;</code> (e.g., <code>fastapihooks-redis</code>, <code>fastapihooks-sqs</code>).</li>
+<li>Declare <code>fastapihooks</code> as a dependency without pinning the minor version: <code>fastapihooks&gt;=0.1</code>.</li>
 <li>Add the optional transport library as a dependency with extras:
    <div class="language-toml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[project]</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;fasthooks&gt;=0.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;redis[asyncio]&gt;=5.0&quot;</span><span class="p">]</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;fastapihooks&gt;=0.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;redis[asyncio]&gt;=5.0&quot;</span><span class="p">]</span>
 </span></code></pre></div></li>
 <li>Export your class from the package root so users can do:
-   <div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks_redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisStreamBackend</span>
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapihooks_redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisStreamBackend</span>
 </span></code></pre></div></li>
 </ol>
 

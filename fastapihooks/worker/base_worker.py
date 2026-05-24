@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class BaseWorker(ABC):
-    """Abstract worker contract for fasthooks sidecars."""
+    """Abstract worker contract for fastapihooks sidecars."""
 
     @abstractmethod
     async def run(self):

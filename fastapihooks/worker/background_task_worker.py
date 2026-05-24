@@ -1,4 +1,4 @@
-from fasthooks.worker.base_worker import BaseWorker
+from fastapihooks.worker.base_worker import BaseWorker
 
 
 class BackgroundTaskWorker(BaseWorker):

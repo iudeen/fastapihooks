@@ -8,10 +8,10 @@ from unittest.mock import AsyncMock
 
 import httpx
 
-from fasthooks.stores.base_store import WebhookSubscription
-from fasthooks.stores.memory_store import MemoryStore
-from fasthooks.worker.dead_letter import InMemoryDeadLetterQueue
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks.stores.base_store import WebhookSubscription
+from fastapihooks.stores.memory_store import MemoryStore
+from fastapihooks.worker.dead_letter import InMemoryDeadLetterQueue
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -40,7 +40,7 @@ class TestHmacSignature:
         payload = {"order_id": 42}
         await signing_dispatcher.broadcast_to_subscribers(payload=payload, subscribers=[sub])
         assert len(recorded_requests) == 1
-        sig_header = recorded_requests[0].headers.get("X-Fasthooks-Signature")
+        sig_header = recorded_requests[0].headers.get("X-Fastapihooks-Signature")
         assert sig_header is not None
         assert sig_header.startswith("sha256=")
 
@@ -48,14 +48,14 @@ class TestHmacSignature:
         sub = _make_sub()
         payload = {"order_id": 42}
         await signing_dispatcher.broadcast_to_subscribers(payload=payload, subscribers=[sub])
-        received_sig = recorded_requests[0].headers["X-Fasthooks-Signature"]
+        received_sig = recorded_requests[0].headers["X-Fastapihooks-Signature"]
         expected_sig = _expected_signature(signing_secret, payload)
         assert received_sig == expected_sig
 
     async def test_signature_header_absent_when_no_secret(self, dispatcher, recorded_requests):
         sub = _make_sub()
         await dispatcher.broadcast_to_subscribers(payload={"x": 1}, subscribers=[sub])
-        assert "X-Fasthooks-Signature" not in recorded_requests[0].headers
+        assert "X-Fastapihooks-Signature" not in recorded_requests[0].headers
 
     async def test_content_type_is_json(self, dispatcher, recorded_requests):
         sub = _make_sub()
@@ -65,7 +65,7 @@ class TestHmacSignature:
     async def test_event_name_header_set(self, dispatcher, recorded_requests):
         sub = _make_sub()
         await dispatcher.broadcast_to_subscribers(payload={"x": 1}, subscribers=[sub])
-        assert recorded_requests[0].headers["X-Fasthooks-Event"] == "order.created"
+        assert recorded_requests[0].headers["X-Fastapihooks-Event"] == "order.created"
 
 
 # ---------------------------------------------------------------------------
@@ -368,7 +368,7 @@ class TestDeadLetterQueue:
         client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
         dispatcher = WebhookDispatcher(client=client, max_retries=0)
 
-        with caplog.at_level(logging.ERROR, logger="fasthooks.worker.dispatcher"):
+        with caplog.at_level(logging.ERROR, logger="fastapihooks.worker.dispatcher"):
             await dispatcher._send(_make_sub(), {})
 
         assert any("no dead-letter handler" in r.message for r in caplog.records)

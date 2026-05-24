@@ -10,7 +10,7 @@ except ImportError as e:
         "SQLAlchemy is required for SQLStore. Please install it with 'uv add sqlalchemy[asyncio]' or 'pip install sqlalchemy[asyncio]'"
     ) from e
 
-from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription
+from fastapihooks.stores.base_store import BaseStore, StoredWebhookSubscription
 
 
 class Base(DeclarativeBase):

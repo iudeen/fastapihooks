@@ -1,7 +1,7 @@
 # 04. Backends
 
 ## Policy
-Fasthooks ships with one built-in backend:
+Fastapihooks ships with one built-in backend:
 - BackgroundTaskBackend
 
 Other transports should be implemented externally by subclassing BaseBackend.
@@ -34,8 +34,8 @@ Features:
 ```python
 from typing import Any
 
-from fasthooks.backends import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 class MyQueueBackend(BaseBackend):
     async def publish(
@@ -73,19 +73,19 @@ Key design:
 
 ```python
 from examples.redis_stream_backend import RedisStreamBackend
-from fasthooks import Fasthooks
+from fastapihooks import Fastapihooks
 
 backend = RedisStreamBackend(
     redis_url="redis://localhost:6379",
     consumer_group="prod-workers",
     consumer_name="worker-1",  # unique per worker instance
 )
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 ```
 
 Run a worker:
 ```bash
-fasthooks start \
+fastapihooks start \
     --backend-module examples.redis_stream_backend:redis_backend \
     --store-module myapp.stores:store \
     --signing-secret "your-secret"

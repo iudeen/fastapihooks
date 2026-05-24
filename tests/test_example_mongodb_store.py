@@ -17,7 +17,7 @@ sys.modules.setdefault("motor", MagicMock())
 sys.modules.setdefault("motor.motor_asyncio", _mock_motor_module)
 
 from examples.mongodb_store import MongoDBStore  # noqa: E402
-from fasthooks.stores import StoredWebhookSubscription  # noqa: E402
+from fastapihooks.stores import StoredWebhookSubscription  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers

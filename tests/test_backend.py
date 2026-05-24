@@ -2,10 +2,10 @@
 
 from unittest.mock import AsyncMock
 
-from fasthooks.backends.background_task_backend import BackgroundTaskBackend
-from fasthooks.stores.base_store import WebhookSubscription
-from fasthooks.stores.memory_store import MemoryStore
-from fasthooks.worker.dispatcher import WebhookDispatcher
+from fastapihooks.backends.background_task_backend import BackgroundTaskBackend
+from fastapihooks.stores.base_store import WebhookSubscription
+from fastapihooks.stores.memory_store import MemoryStore
+from fastapihooks.worker.dispatcher import WebhookDispatcher
 
 
 def _make_sub(url: str = "https://target.example.com/hook") -> WebhookSubscription:

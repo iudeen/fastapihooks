@@ -9,8 +9,8 @@ from typing import Any
 
 import httpx
 
-from fasthooks.stores.base_store import StoredWebhookSubscription, WebhookSubscription
-from fasthooks.worker.base_dispatcher import BaseDispatcher
+from fastapihooks.stores.base_store import StoredWebhookSubscription, WebhookSubscription
+from fastapihooks.worker.base_dispatcher import BaseDispatcher
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class WebhookDispatcher(BaseDispatcher):
         """
         Args:
             store: Store exposing ``get_subscriptions(event_name)``; can be None.
-            signing_secret: Shared secret for ``X-Fasthooks-Signature``; omit to skip signing.
+            signing_secret: Shared secret for ``X-Fastapihooks-Signature``; omit to skip signing.
             client: Shared ``httpx.AsyncClient``; a new one is created with a 10s timeout if omitted.
             max_concurrency: Maximum parallel webhook deliveries.
             max_retries: Number of retry attempts after the initial failure (0 = no retries).
@@ -174,11 +174,11 @@ class WebhookDispatcher(BaseDispatcher):
     def _build_headers(self, subscription: WebhookSubscription, payload_bytes: bytes) -> dict[str, str]:
         headers: dict[str, str] = {
             "Content-Type": "application/json",
-            "X-Fasthooks-Event": subscription.event_name,
+            "X-Fastapihooks-Event": subscription.event_name,
         }
         if self.secret:
             hex_digest = hmac.new(self.secret, payload_bytes, hashlib.sha256).hexdigest()
-            headers["X-Fasthooks-Signature"] = f"sha256={hex_digest}"
+            headers["X-Fastapihooks-Signature"] = f"sha256={hex_digest}"
         return headers
 
     def _build_auth(self, subscription: WebhookSubscription) -> httpx.Auth | None:

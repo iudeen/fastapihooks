@@ -8,11 +8,11 @@ from fastapi import BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, ConfigDict, Field
 
-from fasthooks.backends.base_backend import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends.base_backend import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
-class FasthooksContext(BaseModel):
+class FastapihooksContext(BaseModel):
     """
     The type-safe container passed to user-defined 'transform' functions.
     """
@@ -29,7 +29,7 @@ class FasthooksContext(BaseModel):
     response_payload: Any | None = None
 
 
-class Fasthooks:
+class Fastapihooks:
     def __init__(
         self,
         backend: BaseBackend,
@@ -58,7 +58,7 @@ class Fasthooks:
         include_headers: bool = False,
         include_request: bool = False,
         include_response: bool = True,
-        transform: Callable[[FasthooksContext], Any] | None = None,
+        transform: Callable[[FastapihooksContext], Any] | None = None,
         owner_id_resolver: Callable[[Request], str | None] | None = None,
     ):
         def decorator(func):
@@ -84,7 +84,7 @@ class Fasthooks:
 
                 async def _emit_task():
                     if request is None and (include_headers or include_request):
-                        raise RuntimeError("Fasthooks requires 'request: Request' when headers or request body are included.")
+                        raise RuntimeError("Fastapihooks requires 'request: Request' when headers or request body are included.")
 
                     owner_id: str | None = owner_id_override if owner_id_override is not None else self.owner_id
                     if owner_id_resolver is not None and request is not None:
@@ -92,7 +92,7 @@ class Fasthooks:
                         if resolved_owner is not None:
                             owner_id = resolved_owner
 
-                    ctx = FasthooksContext(
+                    ctx = FastapihooksContext(
                         event_name=event_name,
                         owner_id=owner_id,
                         headers=dict(request.headers) if include_headers else None,

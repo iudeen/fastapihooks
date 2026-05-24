@@ -15,13 +15,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `InMemoryDeadLetterQueue` — drop-in `on_failure` handler that captures exhausted deliveries in memory.
 - `MemoryStore` — in-process subscription store for development and testing.
 - `SQLStore` — durable subscription store backed by SQLAlchemy 2.x (PostgreSQL, MySQL, SQLite).
-- `FasthooksContext` — Pydantic model carrying event name, owner ID, timestamp, headers, request body, and response payload.
+- `FastapihooksContext` — Pydantic model carrying event name, owner ID, timestamp, headers, request body, and response payload.
 - `@hooks.hook` decorator — attaches webhook emission to any FastAPI route with optional transform, header capture, and request body capture.
-- `aclose()` and async context manager support on `Fasthooks` and `BackgroundTaskBackend`.
+- `aclose()` and async context manager support on `Fastapihooks` and `BackgroundTaskBackend`.
 - `py.typed` PEP 561 marker — full type-checking support.
 - Reference examples: Redis Streams backend (`examples/redis_stream_backend.py`), MongoDB store (`examples/mongodb_store.py`).
 - Full documentation: quickstart, core API, backends, stores, worker engine, security/reliability, architecture deep-dive, extension guide, roadmap.
 
 ### Notes
-- Signing secret is optional. When omitted, the `X-Fasthooks-Signature` header is not sent.
+- Signing secret is optional. When omitted, the `X-Fastapihooks-Signature` header is not sent.
 - `include_request=True` returns empty bytes if a Pydantic model parameter already consumed the request body. See [Core API docs](docs/03-core-api.md) for the safe usage pattern.

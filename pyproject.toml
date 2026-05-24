@@ -1,5 +1,5 @@
 [project]
-name = "fasthooks"
+name = "fastapihooks"
 version = "0.1.0"
 description = "Fasthook is a webhook framework for FastAPI Applications"
 readme = "README.md"
@@ -44,13 +44,13 @@ classifiers = [
 ]
 
 [project.scripts]
-fasthooks = "fasthooks.worker.engine:main"
+fastapihooks = "fastapihooks.worker.engine:main"
 
 [tool.setuptools.packages.find]
-include = ["fasthooks*"]
+include = ["fastapihooks*"]
 
 [tool.setuptools.package-data]
-fasthooks = ["py.typed"]
+fastapihooks = ["py.typed"]
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]
@@ -61,7 +61,7 @@ parallel = true
 data_file = "coverage/.coverage"
 source = [
     "tests",
-    "fasthooks"
+    "fastapihooks"
 ]
 relative_files = true
 context = '${CONTEXT}'

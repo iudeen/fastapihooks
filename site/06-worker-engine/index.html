@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Fasthooks is a high-performance, and pluggable webhook management system for FastAPI">
+        <meta name="description" content="Fastapihooks is a high-performance, and pluggable webhook management system for FastAPI">
       
       
         <meta name="author" content="Irfanuddin">
@@ -27,7 +27,7 @@
     
     
       
-        <title>06. Worker Engine - Fasthooks</title>
+        <title>06. Worker Engine - Fastapihooks</title>
       
     
     
@@ -99,7 +99,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="./.." title="Fasthooks" class="md-header__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-header__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
@@ -113,7 +113,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Fasthooks
+            Fastapihooks
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -198,13 +198,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="./.." title="Fasthooks" class="md-nav__button md-logo" aria-label="Fasthooks" data-md-component="logo">
+    <a href="./.." title="Fastapihooks" class="md-nav__button md-logo" aria-label="Fastapihooks" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    Fasthooks
+    Fastapihooks
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -223,7 +223,7 @@
   <span class="md-ellipsis">
     
   
-  Fasthooks Documentation
+  Fastapihooks Documentation
 
     
   </span>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fasthooksengine-flow" class="md-nav__link">
+  <a href="#fastapihooksengine-flow" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        FasthooksEngine Flow
+        FastapihooksEngine Flow
       </span>
     </span>
   </a>
@@ -675,10 +675,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fasthooksengine-flow" class="md-nav__link">
+  <a href="#fastapihooksengine-flow" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        FasthooksEngine Flow
+        FastapihooksEngine Flow
       </span>
     </span>
   </a>
@@ -745,7 +745,7 @@
 <h2 id="why-it-exists">Why It Exists<a class="headerlink" href="#why-it-exists" title="Permanent link">&para;</a></h2>
 <p>The sidecar engine is for queue-backed custom backends that expose consume and ack behavior.</p>
 <p>BackgroundTaskBackend does not use this loop.</p>
-<h2 id="fasthooksengine-flow">FasthooksEngine Flow<a class="headerlink" href="#fasthooksengine-flow" title="Permanent link">&para;</a></h2>
+<h2 id="fastapihooksengine-flow">FastapihooksEngine Flow<a class="headerlink" href="#fastapihooksengine-flow" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Consume event from backend.</li>
 <li>Dispatch to matching subscribers.</li>
@@ -754,7 +754,7 @@
 </ol>
 <h2 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h2>
 <p>Entry point command:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fasthooks<span class="w"> </span>start<span class="w"> </span>--backend-module<span class="w"> </span>myapp.backends:backend<span class="w"> </span>--store-module<span class="w"> </span>myapp.stores:store<span class="w"> </span>--signing-secret<span class="w"> </span><span class="s2">&quot;secret&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fastapihooks<span class="w"> </span>start<span class="w"> </span>--backend-module<span class="w"> </span>myapp.backends:backend<span class="w"> </span>--store-module<span class="w"> </span>myapp.stores:store<span class="w"> </span>--signing-secret<span class="w"> </span><span class="s2">&quot;secret&quot;</span>
 </span></code></pre></div></p>
 <p>Main options:
 - --backend-module module_path:instance

@@ -1,6 +1,6 @@
 # 11. Building Extensions
 
-This page explains how to build your own Fasthooks backends and stores as reusable
+This page explains how to build your own Fastapihooks backends and stores as reusable
 packages or project-local modules. The reference implementations in `examples/` follow
 these patterns exactly.
 
@@ -28,8 +28,8 @@ Subclass `BaseBackend` and implement:
 
 ```python
 from typing import Any
-from fasthooks.backends import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
 class MyBackend(BaseBackend):
@@ -55,8 +55,8 @@ from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Any
 
-from fasthooks.backends import BaseBackend
-from fasthooks.stores.base_store import WebhookSubscription
+from fastapihooks.backends import BaseBackend
+from fastapihooks.stores.base_store import WebhookSubscription
 
 
 @dataclass
@@ -94,7 +94,7 @@ class MyQueueBackend(BaseBackend):
         await self._queue.close()
 ```
 
-> **Event object shape:** The sidecar engine (`FasthooksEngine`) reads `.id`,
+> **Event object shape:** The sidecar engine (`FastapihooksEngine`) reads `.id`,
 > `.event_name`, and `.payload` from each yielded object. Your dataclass or model
 > must expose these three attributes.
 
@@ -103,10 +103,10 @@ class MyQueueBackend(BaseBackend):
 ```python
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, BackgroundTasks
-from fasthooks import Fasthooks
+from fastapihooks import Fastapihooks
 
 backend = MyQueueBackend(...)
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -124,7 +124,7 @@ async def create_order(background_tasks: BackgroundTasks):
 ### Running the sidecar worker
 
 ```bash
-fasthooks start \
+fastapihooks start \
     --backend-module myapp.backends:my_backend_instance \
     --store-module myapp.stores:my_store_instance \
     --signing-secret "your-secret" \
@@ -170,7 +170,7 @@ import uuid
 from collections.abc import Iterable
 from typing import Any, Literal
 
-from fasthooks.stores import BaseStore, StoredWebhookSubscription
+from fastapihooks.stores import BaseStore, StoredWebhookSubscription
 
 
 class MyStore(BaseStore):
@@ -238,12 +238,12 @@ your store directly.
 ```python
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fasthooks import Fasthooks
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks import Fastapihooks
+from fastapihooks.backends import BackgroundTaskBackend
 
 store = MyStore(...)
 backend = BackgroundTaskBackend(signing_secret="your-secret", store=store)
-hooks = Fasthooks(backend=backend)
+hooks = Fastapihooks(backend=backend)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -299,14 +299,14 @@ for complete worked examples of this pattern.
 Extensions can live in your application codebase or be published as standalone
 packages. If publishing to PyPI:
 
-1. Name the package `fasthooks-<transport>` (e.g., `fasthooks-redis`, `fasthooks-sqs`).
-2. Declare `fasthooks` as a dependency without pinning the minor version: `fasthooks>=0.1`.
+1. Name the package `fastapihooks-<transport>` (e.g., `fastapihooks-redis`, `fastapihooks-sqs`).
+2. Declare `fastapihooks` as a dependency without pinning the minor version: `fastapihooks>=0.1`.
 3. Add the optional transport library as a dependency with extras:
    ```toml
    [project]
-   dependencies = ["fasthooks>=0.1", "redis[asyncio]>=5.0"]
+   dependencies = ["fastapihooks>=0.1", "redis[asyncio]>=5.0"]
    ```
 4. Export your class from the package root so users can do:
    ```python
-   from fasthooks_redis import RedisStreamBackend
+   from fastapihooks_redis import RedisStreamBackend
    ```

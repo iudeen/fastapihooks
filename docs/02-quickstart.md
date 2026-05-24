@@ -6,7 +6,7 @@
 
 ## Install
 ```bash
-pip install fasthooks
+pip install fastapihooks
 ```
 
 ## Minimal Setup
@@ -14,10 +14,10 @@ pip install fasthooks
 from contextlib import asynccontextmanager
 from fastapi import BackgroundTasks, FastAPI, Request
 
-from fasthooks import Fasthooks
-from fasthooks.backends import BackgroundTaskBackend
+from fastapihooks import Fastapihooks
+from fastapihooks.backends import BackgroundTaskBackend
 
-hooks = Fasthooks(
+hooks = Fastapihooks(
     backend=BackgroundTaskBackend(signing_secret="dev-secret")
 )
 
@@ -36,9 +36,9 @@ async def create_order(request: Request, background_tasks: BackgroundTasks):
 
 ## Add Direct Subscribers
 ```python
-from fasthooks.stores import WebhookSubscription
+from fastapihooks.stores import WebhookSubscription
 
-hooks = Fasthooks(
+hooks = Fastapihooks(
     backend=BackgroundTaskBackend(signing_secret="dev-secret"),
     subscribers={
         "order.created": [
@@ -54,9 +54,9 @@ hooks = Fasthooks(
 
 ## Transform Payloads
 ```python
-from fasthooks import FasthooksContext
+from fastapihooks import FastapihooksContext
 
-def transform_order(ctx: FasthooksContext):
+def transform_order(ctx: FastapihooksContext):
     return {
         "event": ctx.event_name,
         "owner": ctx.owner_id,
