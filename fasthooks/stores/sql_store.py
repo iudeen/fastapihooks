@@ -24,7 +24,7 @@ class WebhookSubscriptionModel(Base):
     target_url = Column(String)
     auth_type = Column(String, default="none")
     auth_value = Column(String, nullable=True)
-    metadata = Column(JSON, default=dict)
+    metadata_json = Column("metadata", JSON, default=dict)
 
     def to_subscription(self) -> StoredWebhookSubscription:
         return StoredWebhookSubscription(
@@ -33,7 +33,7 @@ class WebhookSubscriptionModel(Base):
             target_url=self.target_url,
             auth_type=self.auth_type,
             auth_value=self.auth_value,
-            metadata=self.metadata or {},
+            metadata=self.metadata_json or {},
         )
 
 
@@ -76,7 +76,7 @@ class SQLStore(BaseStore):
                 target_url=target_url,
                 auth_type=auth_type,
                 auth_value=auth_value,
-                metadata=metadata or {},
+                metadata_json=metadata or {},
             )
             session.add(db_subscription)
             await session.commit()
@@ -138,7 +138,10 @@ class SQLStore(BaseStore):
             if auth_value is not None:
                 subscription.auth_value = auth_value
             if metadata is not None:
-                subscription.metadata = {**(subscription.metadata or {}), **metadata}
+                subscription.metadata_json = {
+                    **(subscription.metadata_json or {}),
+                    **metadata,
+                }
             
             await session.commit()
             return True
