@@ -1,7 +1,5 @@
 """Shared fixtures for fasthooks test suite."""
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 import pytest
@@ -9,7 +7,6 @@ import pytest
 from fasthooks.stores.base_store import WebhookSubscription
 from fasthooks.stores.memory_store import MemoryStore
 from fasthooks.worker.dispatcher import WebhookDispatcher
-
 
 # ---------------------------------------------------------------------------
 # HTTP mock helpers

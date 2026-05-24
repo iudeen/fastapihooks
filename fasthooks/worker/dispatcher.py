@@ -18,6 +18,15 @@ logger = logging.getLogger(__name__)
 _RETRYABLE_STATUS = range(500, 600)
 
 
+class _BearerAuth(httpx.Auth):
+    def __init__(self, token: str) -> None:
+        self.token = token
+
+    def auth_flow(self, request):  # type: ignore[override]
+        request.headers["Authorization"] = f"Bearer {self.token}"
+        yield request
+
+
 class WebhookDispatcher(BaseDispatcher):
     """Fan-out dispatcher for delivering webhook payloads.
 
@@ -174,14 +183,6 @@ class WebhookDispatcher(BaseDispatcher):
 
     def _build_auth(self, subscription: WebhookSubscription) -> httpx.Auth | None:
         if subscription.auth_type == "bearer" and subscription.auth_value:
-            class _BearerAuth(httpx.Auth):
-                def __init__(self, token: str) -> None:
-                    self.token = token
-
-                def auth_flow(self, request):  # type: ignore[override]
-                    request.headers["Authorization"] = f"Bearer {self.token}"
-                    yield request
-
             return _BearerAuth(subscription.auth_value)
         return None
 

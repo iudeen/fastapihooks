@@ -1,18 +1,14 @@
 """Tests for Fasthooks.hook() decorator and FasthooksContext."""
 
 from datetime import datetime, timezone
-from typing import Optional
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
-import pytest
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.testclient import TestClient
-from httpx import ASGITransport, AsyncClient
 
 from fasthooks.backends.base_backend import BaseBackend
-from fasthooks.core import FasthooksContext, Fasthooks
+from fasthooks.core import Fasthooks, FasthooksContext
 from fasthooks.stores.base_store import WebhookSubscription
-
 
 # ---------------------------------------------------------------------------
 # Minimal stub backend
@@ -26,12 +22,12 @@ class StubBackend(BaseBackend):
 
     async def publish(self, event_name, payload, owner_id, subscribers=None):
         self.calls.append(
-            dict(
-                event_name=event_name,
-                payload=payload,
-                owner_id=owner_id,
-                subscribers=subscribers,
-            )
+            {
+                "event_name": event_name,
+                "payload": payload,
+                "owner_id": owner_id,
+                "subscribers": subscribers,
+            }
         )
 
     async def aclose(self) -> None:
@@ -89,8 +85,8 @@ def _build_app(
     include_response: bool = True,
     transform=None,
     owner_id_resolver=None,
-    global_owner_id: Optional[str] = None,
-    global_subscribers: Optional[dict] = None,
+    global_owner_id: str | None = None,
+    global_subscribers: dict | None = None,
     is_sync: bool = False,
 ) -> tuple[FastAPI, StubBackend]:
     app = FastAPI()

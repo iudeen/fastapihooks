@@ -1,9 +1,6 @@
 """Tests for BackgroundTaskBackend."""
 
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import httpx
-import pytest
+from unittest.mock import AsyncMock
 
 from fasthooks.backends.background_task_backend import BackgroundTaskBackend
 from fasthooks.stores.base_store import WebhookSubscription

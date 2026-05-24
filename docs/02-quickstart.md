@@ -1,7 +1,7 @@
 # 02. Quick Start
 
 ## Requirements
-- Python 3.9+
+- Python 3.10+
 - FastAPI app
 
 ## Install
@@ -36,7 +36,7 @@ async def create_order(request: Request, background_tasks: BackgroundTasks):
 
 ## Add Direct Subscribers
 ```python
-from fasthooks.stores.base_store import WebhookSubscription
+from fasthooks.stores import WebhookSubscription
 
 hooks = Fasthooks(
     backend=BackgroundTaskBackend(signing_secret="dev-secret"),

@@ -70,6 +70,13 @@ async def create_order(...):
     ...
 ```
 
+> **`include_request=True` caveat** — When FastAPI parses a Pydantic model parameter
+> (e.g. `body: OrderIn`), it consumes the request body before your handler runs.
+> After that, `await request.body()` returns empty bytes and `ctx.request_payload`
+> will be `b""`. Use `include_request=True` only when you inject the raw `Request`
+> and read the body yourself. If you only need request headers, prefer
+> `include_headers=True` — that is always safe.
+
 #### Pluggable Architecture
 
 | Component | Responsibility | Available Drivers |

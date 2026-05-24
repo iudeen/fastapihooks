@@ -4,13 +4,14 @@
 - Built-in backend: BackgroundTaskBackend.
 - Built-in stores: MemoryStore and SQLStore.
 - Dispatcher supports retries, backoff, HMAC signing, and dead-letter callback.
+- Reference examples: Redis Streams backend (`examples/redis_stream_backend.py`), MongoDB store (`examples/mongodb_store.py`).
 
 ## Planned Integration Areas
-- Queue backends via external packages.
+- Publish reference examples as standalone installable packages.
 - Telemetry integrations (OpenTelemetry, Prometheus, Logfire).
-- Additional store adapters (MongoDB, DynamoDB, Redis).
+- Additional store adapters (DynamoDB, Redis).
 
-## Suggested Milestones
+## Help Wanted
 1. Publish a custom backend reference package.
 2. Publish a production dead-letter adapter package.
 3. Add end-to-end examples for queue-backed worker mode.

@@ -46,6 +46,9 @@ classifiers = [
 [project.scripts]
 fasthooks = "fasthooks.worker.engine:main"
 
+[tool.setuptools.packages.find]
+include = ["fasthooks*"]
+
 [tool.setuptools.package-data]
 fasthooks = ["py.typed"]
 

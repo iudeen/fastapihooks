@@ -305,6 +305,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#reference-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference Examples
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -547,6 +558,58 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./10-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  10. Concepts and Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./11-extending/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  11. Building Extensions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -620,6 +683,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#reference-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference Examples
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -656,6 +730,8 @@
 <li><a href="07-security-reliability/">07-security-reliability.md</a> - Signatures, retries, and failure handling.</li>
 <li><a href="08-agent-playbook/">08-agent-playbook.md</a> - Agent-agnostic repo workflow.</li>
 <li><a href="09-roadmap/">09-roadmap.md</a> - Planned integrations and recommended milestones.</li>
+<li><a href="10-architecture/">10-architecture.md</a> - Deep-dive on how Fasthooks works internally (newbie-friendly).</li>
+<li><a href="11-extending/">11-extending.md</a> - How to build and package custom backends and stores.</li>
 </ul>
 <h2 id="documentation-scope">Documentation Scope<a class="headerlink" href="#documentation-scope" title="Permanent link">&para;</a></h2>
 <p>This documentation tracks shipped behavior in the repository while preserving the long-term product vision.</p>
@@ -665,6 +741,12 @@
 <li>If you need custom transport, jump to <a href="04-backends/">04-backends.md</a>.</li>
 <li>If you need a queue sidecar, read <a href="06-worker-engine/">06-worker-engine.md</a>.</li>
 </ol>
+<h2 id="reference-examples">Reference Examples<a class="headerlink" href="#reference-examples" title="Permanent link">&para;</a></h2>
+<p>Ready-to-use implementations in the <code>examples/</code> folder:</p>
+<ul>
+<li><strong>Redis Streams backend</strong> — horizontal scale with consumer groups (<code>examples/redis_stream_backend.py</code>)</li>
+<li><strong>MongoDB store</strong> — durable subscriptions via Motor (<code>examples/mongodb_store.py</code>)</li>
+</ul>
 
 
 

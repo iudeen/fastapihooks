@@ -4,6 +4,7 @@
 Fasthooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.
 
 Core idea:
+
 1. Your API route runs business logic.
 2. Fasthooks captures event context.
 3. Webhook delivery is offloaded through a backend path.

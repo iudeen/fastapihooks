@@ -4,16 +4,14 @@ import asyncio
 import hashlib
 import hmac
 import json
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
 import httpx
-import pytest
 
 from fasthooks.stores.base_store import WebhookSubscription
 from fasthooks.stores.memory_store import MemoryStore
 from fasthooks.worker.dead_letter import InMemoryDeadLetterQueue
 from fasthooks.worker.dispatcher import WebhookDispatcher
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -212,7 +210,6 @@ class TestBroadcast:
 class TestMaxConcurrency:
     async def test_max_concurrency_limits_parallel_deliveries(self):
         """Ensure the semaphore actually restricts concurrency."""
-        import asyncio
 
         concurrent_high_water = 0
         current_concurrent = 0

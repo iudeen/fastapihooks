@@ -433,6 +433,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#reference-implementation-redis-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference Implementation: Redis Streams
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -571,6 +582,58 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  10. Concepts and Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-extending/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  11. Building Extensions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -666,6 +729,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#reference-implementation-redis-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference Implementation: Redis Streams
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -745,6 +819,30 @@
 <li>Do not mutate payload in transport layer unless documented.</li>
 <li>Keep retry semantics in one place to avoid double retries.</li>
 </ul>
+<h2 id="reference-implementation-redis-streams">Reference Implementation: Redis Streams<a class="headerlink" href="#reference-implementation-redis-streams" title="Permanent link">&para;</a></h2>
+<p><code>examples/redis_stream_backend.py</code> provides a production-ready Redis Streams backend.</p>
+<p>Key design:
+- <code>publish()</code> calls <code>XADD</code> to enqueue the event.
+- <code>consume()</code> uses <code>XREADGROUP</code> with a consumer group — multiple workers share the stream without processing the same event twice.
+- <code>ack()</code> calls <code>XACK</code> to confirm delivery.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">examples.redis_stream_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisStreamBackend</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fasthooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fasthooks</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">RedisStreamBackend</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">redis_url</span><span class="o">=</span><span class="s2">&quot;redis://localhost:6379&quot;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">consumer_group</span><span class="o">=</span><span class="s2">&quot;prod-workers&quot;</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">consumer_name</span><span class="o">=</span><span class="s2">&quot;worker-1&quot;</span><span class="p">,</span>  <span class="c1"># unique per worker instance</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">hooks</span> <span class="o">=</span> <span class="n">Fasthooks</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Run a worker:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fasthooks<span class="w"> </span>start<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>--backend-module<span class="w"> </span>examples.redis_stream_backend:redis_backend<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>--store-module<span class="w"> </span>myapp.stores:store<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>--signing-secret<span class="w"> </span><span class="s2">&quot;your-secret&quot;</span>
+</span></code></pre></div></p>
+<p>Scale horizontally by launching additional workers with different <code>consumer_name</code> values in the same <code>consumer_group</code>. Redis ensures each event is processed exactly once across the group.</p>
+<p>Install: <code>pip install redis[asyncio]</code></p>
 
 
 

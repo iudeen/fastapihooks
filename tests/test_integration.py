@@ -4,7 +4,6 @@ import json
 from contextlib import asynccontextmanager
 
 import httpx
-import pytest
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.testclient import TestClient
 
@@ -12,7 +11,6 @@ from fasthooks import Fasthooks, InMemoryDeadLetterQueue
 from fasthooks.backends import BackgroundTaskBackend
 from fasthooks.stores import MemoryStore, WebhookSubscription
 from fasthooks.worker.dispatcher import WebhookDispatcher
-
 
 # ---------------------------------------------------------------------------
 # Helpers

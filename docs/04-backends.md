@@ -61,3 +61,36 @@ class MyQueueBackend(BaseBackend):
 - Keep signature parity with BaseBackend.
 - Do not mutate payload in transport layer unless documented.
 - Keep retry semantics in one place to avoid double retries.
+
+## Reference Implementation: Redis Streams
+
+`examples/redis_stream_backend.py` provides a production-ready Redis Streams backend.
+
+Key design:
+- `publish()` calls `XADD` to enqueue the event.
+- `consume()` uses `XREADGROUP` with a consumer group — multiple workers share the stream without processing the same event twice.
+- `ack()` calls `XACK` to confirm delivery.
+
+```python
+from examples.redis_stream_backend import RedisStreamBackend
+from fasthooks import Fasthooks
+
+backend = RedisStreamBackend(
+    redis_url="redis://localhost:6379",
+    consumer_group="prod-workers",
+    consumer_name="worker-1",  # unique per worker instance
+)
+hooks = Fasthooks(backend=backend)
+```
+
+Run a worker:
+```bash
+fasthooks start \
+    --backend-module examples.redis_stream_backend:redis_backend \
+    --store-module myapp.stores:store \
+    --signing-secret "your-secret"
+```
+
+Scale horizontally by launching additional workers with different `consumer_name` values in the same `consumer_group`. Redis ensures each event is processed exactly once across the group.
+
+Install: `pip install redis[asyncio]`

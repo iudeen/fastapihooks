@@ -560,6 +560,58 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  10. Concepts and Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-extending/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  11. Building Extensions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -670,10 +722,12 @@
 <h1 id="01-overview">01. Overview<a class="headerlink" href="#01-overview" title="Permanent link">&para;</a></h1>
 <h2 id="what-fasthooks-is">What Fasthooks Is<a class="headerlink" href="#what-fasthooks-is" title="Permanent link">&para;</a></h2>
 <p>Fasthooks is a webhook framework for FastAPI applications that focuses on low-latency API responses and pluggable delivery architecture.</p>
-<p>Core idea:
-1. Your API route runs business logic.
-2. Fasthooks captures event context.
-3. Webhook delivery is offloaded through a backend path.</p>
+<p>Core idea:</p>
+<ol>
+<li>Your API route runs business logic.</li>
+<li>Fasthooks captures event context.</li>
+<li>Webhook delivery is offloaded through a backend path.</li>
+</ol>
 <h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Keep core lightweight.</li>

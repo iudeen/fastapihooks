@@ -42,3 +42,42 @@ Use SQLStore when:
 - Keep event_name indexing efficient.
 - Use partial metadata merges for update paths.
 - Validate target_url and auth constraints near write boundaries.
+
+## Reference Implementation: MongoDB
+
+`examples/mongodb_store.py` provides a ready-to-use MongoDB store via Motor (async driver).
+
+```python
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from examples.mongodb_store import MongoDBStore
+from fasthooks import Fasthooks
+from fasthooks.backends import BackgroundTaskBackend
+
+store = MongoDBStore(mongo_url="mongodb://localhost:27017", database="myapp")
+backend = BackgroundTaskBackend(signing_secret="your-secret", store=store)
+hooks = Fasthooks(backend=backend)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await store.init_indexes()   # creates event_name index on first run
+    async with hooks:
+        yield
+    store.close()
+
+app = FastAPI(lifespan=lifespan)
+```
+
+Managing subscriptions at runtime:
+```python
+sid = await store.add_subscription(
+    event_name="order.created",
+    target_url="https://partner.example.com/webhooks",
+    auth_type="bearer",
+    auth_value="partner-token",
+)
+await store.update_subscription(sid, target_url="https://partner.example.com/v2/webhooks")
+await store.remove_subscription(sid)
+```
+
+Install: `pip install motor`
