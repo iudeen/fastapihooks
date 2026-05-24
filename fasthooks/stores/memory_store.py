@@ -58,15 +58,18 @@ class MemoryStore(BaseStore):
             return False
 
         sub = self._subscriptions[subscription_id]
-        if target_url is not None:
-            sub.target_url = target_url
-        if auth_type is not None:
-            sub.auth_type = auth_type
-        if auth_value is not None:
-            sub.auth_value = auth_value
-        if metadata is not None:
-            sub.metadata.update(metadata)
 
+        changes: dict = {}
+        if target_url is not None:
+            changes["target_url"] = target_url
+        if auth_type is not None:
+            changes["auth_type"] = auth_type
+        if auth_value is not None:
+            changes["auth_value"] = auth_value
+        if metadata is not None:
+            changes["metadata"] = {**(sub.metadata or {}), **metadata}
+
+        self._subscriptions[subscription_id] = sub.model_copy(update=changes)
         return True
 
     async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:

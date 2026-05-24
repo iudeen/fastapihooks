@@ -1,9 +1,9 @@
 from typing import Any, Iterable, Literal, Optional
 
 try:
-    from sqlalchemy import JSON, Column, String, create_engine, select
+    from sqlalchemy import JSON, Column, String, select
     from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-    from sqlalchemy.orm import declarative_base, sessionmaker
+    from sqlalchemy.orm import DeclarativeBase, sessionmaker
 except ImportError:
     raise ImportError(
         "SQLAlchemy is required for SQLStore. Please install it with 'uv add sqlalchemy[asyncio]' or 'pip install sqlalchemy[asyncio]'"
@@ -11,7 +11,8 @@ except ImportError:
 
 from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription, WebhookSubscription
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
 class WebhookSubscriptionModel(Base):

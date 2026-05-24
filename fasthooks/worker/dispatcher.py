@@ -2,12 +2,15 @@ import asyncio
 import hashlib
 import hmac
 import json
+import logging
 from typing import Any, Iterable
 
 import httpx
 
 from fasthooks.stores.base_store import StoredWebhookSubscription, WebhookSubscription
 from fasthooks.worker.base_dispatcher import BaseDispatcher
+
+logger = logging.getLogger(__name__)
 
 
 class WebhookDispatcher(BaseDispatcher):
@@ -34,7 +37,7 @@ class WebhookDispatcher(BaseDispatcher):
             max_concurrency: Maximum number of concurrent webhook deliveries.
         """
         self.store = store
-        self.secret = signing_secret.encode()
+        self.secret = signing_secret.encode() if signing_secret else None
         self.semaphore = asyncio.Semaphore(max_concurrency)
         self.client = client or httpx.AsyncClient(timeout=10.0)
 
@@ -52,7 +55,7 @@ class WebhookDispatcher(BaseDispatcher):
             return
 
         tasks = [self._send(subscription, payload) for subscription in subscriptions]
-        await asyncio.gather(*tasks)
+        await self._gather(tasks)
 
     async def broadcast_to_subscribers(
         self, payload: Any, subscribers: Iterable[WebhookSubscription]
@@ -65,9 +68,17 @@ class WebhookDispatcher(BaseDispatcher):
         """
         if not subscribers:
             return
-        
+
         tasks = [self._send(subscription, payload) for subscription in subscribers]
-        await asyncio.gather(*tasks)
+        await self._gather(tasks)
+
+    @staticmethod
+    async def _gather(tasks: list) -> None:
+        """Run delivery tasks concurrently, logging each failure without aborting siblings."""
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        for result in results:
+            if isinstance(result, BaseException):
+                logger.error("Webhook delivery failed: %s", result, exc_info=result)
 
     async def _get_subscriptions(self, event_name: str) -> Iterable[StoredWebhookSubscription]:
         """Fetch subscriptions for an event from the store."""
@@ -76,13 +87,14 @@ class WebhookDispatcher(BaseDispatcher):
     async def _send(self, subscription: WebhookSubscription, payload: Any) -> None:
         """Send a single webhook to a subscriber (direct or stored)."""
         payload_bytes = json.dumps(payload).encode()
-        signature = hmac.new(self.secret, payload_bytes, hashlib.sha256).hexdigest()
 
-        headers = {
+        headers: dict[str, str] = {
             "Content-Type": "application/json",
-            "X-Fasthooks-Signature": signature,
             "X-Fasthooks-Event": subscription.event_name,
         }
+        if self.secret:
+            hex_digest = hmac.new(self.secret, payload_bytes, hashlib.sha256).hexdigest()
+            headers["X-Fasthooks-Signature"] = f"sha256={hex_digest}"
 
         auth = self._build_auth(subscription)
 

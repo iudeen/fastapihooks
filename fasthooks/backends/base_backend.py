@@ -33,3 +33,10 @@ class BaseBackend(ABC):
     async def ack(self, event_id: str):
         """Acknowledge successful processing for queue-like backends."""
         raise NotImplementedError
+
+    async def aclose(self) -> None:
+        """Release any resources held by the backend (connections, thread pools, etc.).
+
+        Called automatically when using the backend as an async context manager.
+        Override in subclasses that hold long-lived resources.
+        """

@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Optional
 
 from fastapi import BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from fasthooks.backends.base_backend import BaseBackend
 from fasthooks.stores.base_store import WebhookSubscription
@@ -20,13 +20,12 @@ class FasthooksContext(BaseModel):
     owner_id: Optional[str]
     timestamp: datetime = Field(default_factory=lambda: datetime.now(tz=timezone.utc))
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     # Raw data captured from the request/response cycle
     headers: Optional[Dict[str, str]] = None
     request_payload: Optional[Any] = None
     response_payload: Optional[Any] = None
-
-    class Config:
-        arbitrary_types_allowed = True
 
 
 class Fasthooks:
@@ -41,6 +40,16 @@ class Fasthooks:
         self.store = store
         self.owner_id = owner_id
         self.subscribers = subscribers or {}
+
+    async def aclose(self) -> None:
+        """Close backend resources. Call on application shutdown."""
+        await self.backend.aclose()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *_) -> None:
+        await self.aclose()
 
     def hook(
         self,

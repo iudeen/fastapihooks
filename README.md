@@ -22,13 +22,19 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
     ```
 2. Configure
     ```python
+    from contextlib import asynccontextmanager
     from fastapi import FastAPI, BackgroundTasks, Request
     from fasthooks import Fasthooks
     from fasthooks.backends import BackgroundTaskBackend
 
-    app = FastAPI()
-
     hooks = Fasthooks(backend=BackgroundTaskBackend(signing_secret="your-secret"))
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        async with hooks:   # closes HTTP connections on shutdown
+            yield
+
+    app = FastAPI(lifespan=lifespan)
 
     @app.post("/orders")
     @hooks.hook("order.created")
@@ -105,4 +111,14 @@ Fasthooks is designed for horizontal scale. By using the a asynchronous backend 
 ## Security: HMAC Verification
 Fasthooks signs every payload. Your users can verify the authenticity of a webhook using the `X-Fasthooks-Signature` header.
 
+The header value is formatted as `sha256=<hex-digest>`, matching the convention used by GitHub, Stripe, and most webhook providers.
 
+```python
+import hashlib
+import hmac
+
+def verify_signature(payload: bytes, secret: str, header: str) -> bool:
+    algorithm, _, received = header.partition("=")
+    expected = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, received)
+```
