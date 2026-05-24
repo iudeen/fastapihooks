@@ -5,7 +5,7 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
 ## ✨ Key Features
 - ⚡ Zero-Impact Emission: Uses FastAPI BackgroundTasks to ensure webhook processing never slows down your API flow.
 
-- 🔌 Fully Pluggable: Swap out Backends (Redis, Kafka, SQS) and Subscription Stores (Mongo, Postgres, Memory) with zero changes to your business logic.
+- 🔌 Backend by Design, Extensions by You: Fasthooks ships with `BackgroundTaskBackend` only. Build Redis/Kafka/SQS backends by implementing `BaseBackend`.
 
 - 🛠️ Sidecar Worker: A dedicated async engine designed for high-concurrency delivery with built-in retries and HMAC signing.
 
@@ -24,12 +24,11 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
     ```python
     from fastapi import FastAPI, BackgroundTasks, Request
     from fasthooks import Fasthooks
-    from fasthooks.backends import RedisBackend
+    from fasthooks.backends import BackgroundTaskBackend
 
     app = FastAPI()
 
-    # Point to your production Redis
-    hooks = Fasthooks(backend=RedisBackend(url="redis://localhost:6379"))
+    hooks = Fasthooks(backend=BackgroundTaskBackend(signing_secret="your-secret"))
 
     @app.post("/orders")
     @hooks.hook("order.created")
@@ -39,7 +38,9 @@ Fasthooks is a high-performance, and pluggable webhook management system for Fas
     ```
 3. Run the Worker (The Sidecar)
     ```bash 
-    fasthooks worker --backend redis --store mongodb --signing-secret "your-secret"
+    # Not required for BackgroundTaskBackend; dispatch runs in FastAPI BackgroundTasks.
+    # Use the sidecar only when you implement a queue backend with consume()/ack().
+    fasthooks start --backend-module myapp.backends:custom_backend --store-module myapp.stores:store --signing-secret "your-secret"
     ```
 
 ## Advanced Capabilities 
@@ -64,9 +65,39 @@ async def create_order(...):
 
 | Component | Responsibility | Available Drivers |
 |---|---|---|
-|Backend| Transport Layer| `RedisStream`, `Kafka`, `BackgroundTasks` (Local)
+|Backend| Transport Layer| `BackgroundTaskBackend` (Built-in), `Custom Backends via BaseBackend`
 |Store|Subscription Data| `MongoDB`, `SQLAlchemy`, `Memory`
 |Telemetry|Observability| `Logfire`, `OpenTelemetry`, `Prometheus`
+
+#### Custom Backend Contract
+Use `BaseBackend` to add your own transport backend while keeping the main library lightweight.
+
+```python
+from typing import Any, Optional
+
+from fasthooks.backends import BaseBackend
+from fasthooks.stores.base_store import WebhookSubscription
+
+
+class MyQueueBackend(BaseBackend):
+    async def publish(
+        self,
+        event_name: str,
+        payload: Any,
+        owner_id: Optional[str],
+        subscribers: Optional[list[WebhookSubscription]] = None,
+    ):
+        # enqueue event to your transport
+        ...
+
+    async def consume(self):
+        # yield queued events for worker mode
+        ...
+
+    async def ack(self, event_id: str):
+        # ack successful processing
+        ...
+```
 
 ## Scalability Design
 Fasthooks is designed for horizontal scale. By using the a asynchronous backend (eg: Redis Stream Backend), you can run multiple sidecar workers in a Consumer Group. This allows you to process millions of webhooks across a cluster of workers without duplicate deliveries.

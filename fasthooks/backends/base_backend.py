@@ -5,7 +5,12 @@ from fasthooks.stores.base_store import WebhookSubscription
 
 
 class BaseBackend(ABC):
-    """Abstract interface for publishing and consuming webhook events."""
+    """Extension contract for fasthooks transport backends.
+
+    Fasthooks intentionally ships with only `BackgroundTaskBackend` by default.
+    Additional transports (Redis, Kafka, SQS, etc.) should be implemented by
+    users or external packages by subclassing this base class.
+    """
 
     @abstractmethod
     async def publish(
@@ -18,9 +23,13 @@ class BaseBackend(ABC):
         """Enqueue or immediately dispatch a webhook event."""
 
     async def consume(self) -> AsyncIterator[Any]:
-        """Yield events for the worker sidecar. BackgroundTask backend does not implement."""
+        """Yield events for worker-driven backends.
+
+        Backends that dispatch inline (for example, BackgroundTaskBackend)
+        can keep the default NotImplemented behavior.
+        """
         raise NotImplementedError
 
     async def ack(self, event_id: str):
-        """Acknowledge successful processing of an event (noop by default)."""
+        """Acknowledge successful processing for queue-like backends."""
         raise NotImplementedError
