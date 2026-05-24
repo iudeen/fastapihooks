@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Optional
 
 import typer
 
@@ -12,7 +11,7 @@ app = typer.Typer(help="Fasthooks webhook delivery sidecar engine.")
 
 class FasthooksEngine:
     """Main execution engine for the webhook delivery sidecar.
-    
+
     Consumes events from a backend and dispatches them via a dispatcher.
     """
 
@@ -40,7 +39,7 @@ class FasthooksEngine:
 
     async def run(self):
         """The main execution loop for the sidecar.
-        
+
         Consumes events from the backend, dispatches them, and acknowledges completion.
         """
         logger.info("Starting Fasthooks engine...")
@@ -81,7 +80,7 @@ def start(
     ),
 ) -> None:
     """Start the Fasthooks webhook delivery sidecar.
-    
+
     Requires module paths to backend and store instances, plus a signing secret.
     """
     # Configure logging
@@ -96,7 +95,7 @@ def start(
         store = _import_instance(store_module)
     except (ImportError, AttributeError) as e:
         typer.secho(f"Failed to import module: {e}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from None
 
     # Create and run engine
     engine = FasthooksEngine(
@@ -114,13 +113,13 @@ def start(
 
 def _import_instance(module_path: str):
     """Dynamically import and return an instance from a module path.
-    
+
     Args:
         module_path: Path in format 'module.submodule:instance_name'.
-    
+
     Returns:
         The imported instance.
-    
+
     Raises:
         ImportError: If the module cannot be imported.
         AttributeError: If the instance is not found.

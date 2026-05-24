@@ -1,7 +1,11 @@
 import uuid
-from typing import Any, Iterable, Literal, Optional
+from collections.abc import Iterable
+from typing import Any, Literal
 
-from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription, WebhookSubscription
+from fasthooks.stores.base_store import (
+    BaseStore,
+    StoredWebhookSubscription,
+)
 
 
 class MemoryStore(BaseStore):
@@ -15,8 +19,8 @@ class MemoryStore(BaseStore):
         event_name: str,
         target_url: str,
         auth_type: Literal["bearer", "none"] = "none",
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         subscription_id = str(uuid.uuid4())
         subscription = StoredWebhookSubscription(
@@ -49,10 +53,10 @@ class MemoryStore(BaseStore):
     async def update_subscription(
         self,
         subscription_id: str,
-        target_url: Optional[str] = None,
-        auth_type: Optional[Literal["bearer", "none"]] = None,
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        target_url: str | None = None,
+        auth_type: Literal["bearer", "none"] | None = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> bool:
         if subscription_id not in self._subscriptions:
             return False
@@ -72,5 +76,5 @@ class MemoryStore(BaseStore):
         self._subscriptions[subscription_id] = sub.model_copy(update=changes)
         return True
 
-    async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:
+    async def get_subscription(self, subscription_id: str) -> StoredWebhookSubscription | None:
         return self._subscriptions.get(subscription_id)

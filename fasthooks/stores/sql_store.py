@@ -1,15 +1,17 @@
-from typing import Any, Iterable, Literal, Optional
+from collections.abc import Iterable
+from typing import Any, Literal
 
 try:
     from sqlalchemy import JSON, Column, String, select
     from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
     from sqlalchemy.orm import DeclarativeBase, sessionmaker
-except ImportError:
+except ImportError as e:
     raise ImportError(
         "SQLAlchemy is required for SQLStore. Please install it with 'uv add sqlalchemy[asyncio]' or 'pip install sqlalchemy[asyncio]'"
-    )
+    ) from e
 
-from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription, WebhookSubscription
+from fasthooks.stores.base_store import BaseStore, StoredWebhookSubscription
+
 
 class Base(DeclarativeBase):
     pass
@@ -44,7 +46,7 @@ class SQLStore(BaseStore):
     def __init__(self, database_url: str):
         """
         Initialize the SQL store.
-        
+
         Args:
             database_url: Async SQLAlchemy database URL (e.g., 'postgresql+asyncpg://user:pass@localhost/db')
         """
@@ -63,13 +65,13 @@ class SQLStore(BaseStore):
         event_name: str,
         target_url: str,
         auth_type: Literal["bearer", "none"] = "none",
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         import uuid
 
         subscription_id = str(uuid.uuid4())
-        
+
         async with self.async_session() as session:
             db_subscription = WebhookSubscriptionModel(
                 id=subscription_id,
@@ -81,7 +83,7 @@ class SQLStore(BaseStore):
             )
             session.add(db_subscription)
             await session.commit()
-        
+
         return subscription_id
 
     async def remove_subscription(self, subscription_id: str) -> bool:
@@ -92,12 +94,12 @@ class SQLStore(BaseStore):
                 )
             )
             subscription = result.scalars().first()
-            
+
             if subscription:
                 await session.delete(subscription)
                 await session.commit()
                 return True
-            
+
             return False
 
     async def get_subscriptions(
@@ -110,16 +112,16 @@ class SQLStore(BaseStore):
             )
             result = await session.execute(query)
             subscriptions = result.scalars().all()
-            
+
             return [sub.to_subscription() for sub in subscriptions]
 
     async def update_subscription(
         self,
         subscription_id: str,
-        target_url: Optional[str] = None,
-        auth_type: Optional[Literal["bearer", "none"]] = None,
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        target_url: str | None = None,
+        auth_type: Literal["bearer", "none"] | None = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> bool:
         async with self.async_session() as session:
             result = await session.execute(
@@ -128,10 +130,10 @@ class SQLStore(BaseStore):
                 )
             )
             subscription = result.scalars().first()
-            
+
             if not subscription:
                 return False
-            
+
             if target_url is not None:
                 subscription.target_url = target_url
             if auth_type is not None:
@@ -143,11 +145,11 @@ class SQLStore(BaseStore):
                     **(subscription.metadata_json or {}),
                     **metadata,
                 }
-            
+
             await session.commit()
             return True
 
-    async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:
+    async def get_subscription(self, subscription_id: str) -> StoredWebhookSubscription | None:
         async with self.async_session() as session:
             result = await session.execute(
                 select(WebhookSubscriptionModel).where(
@@ -155,7 +157,7 @@ class SQLStore(BaseStore):
                 )
             )
             subscription = result.scalars().first()
-            
+
             return subscription.to_subscription() if subscription else None
 
     async def close(self):

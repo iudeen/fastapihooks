@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterator, Dict, Optional
+from collections.abc import AsyncIterator
+from typing import Any
 
 from fasthooks.stores.base_store import WebhookSubscription
 
@@ -17,8 +18,8 @@ class BaseBackend(ABC):
         self,
         event_name: str,
         payload: Any,
-        owner_id: Optional[str],
-        subscribers: Optional[list[WebhookSubscription]] = None,
+        owner_id: str | None,
+        subscribers: list[WebhookSubscription] | None = None,
     ):
         """Enqueue or immediately dispatch a webhook event."""
 
@@ -34,9 +35,10 @@ class BaseBackend(ABC):
         """Acknowledge successful processing for queue-like backends."""
         raise NotImplementedError
 
-    async def aclose(self) -> None:
+    async def aclose(self) -> None:  # noqa: B027
         """Release any resources held by the backend (connections, thread pools, etc.).
 
         Called automatically when using the backend as an async context manager.
         Override in subclasses that hold long-lived resources.
         """
+        pass

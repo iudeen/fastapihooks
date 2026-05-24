@@ -1,7 +1,8 @@
-from datetime import datetime, timezone
 import inspect
+from collections.abc import Callable
+from datetime import datetime, timezone
 from functools import wraps
-from typing import Any, Callable, Dict, Optional
+from typing import Any
 
 from fastapi import BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
@@ -17,15 +18,15 @@ class FasthooksContext(BaseModel):
     """
 
     event_name: str
-    owner_id: Optional[str]
+    owner_id: str | None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(tz=timezone.utc))
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     # Raw data captured from the request/response cycle
-    headers: Optional[Dict[str, str]] = None
-    request_payload: Optional[Any] = None
-    response_payload: Optional[Any] = None
+    headers: dict[str, str] | None = None
+    request_payload: Any | None = None
+    response_payload: Any | None = None
 
 
 class Fasthooks:
@@ -33,8 +34,8 @@ class Fasthooks:
         self,
         backend: BaseBackend,
         store=None,
-        owner_id: Optional[str] = None,
-        subscribers: Optional[Dict[str, list[WebhookSubscription]]] = None,
+        owner_id: str | None = None,
+        subscribers: dict[str, list[WebhookSubscription]] | None = None,
     ):
         self.backend = backend
         self.store = store
@@ -57,8 +58,8 @@ class Fasthooks:
         include_headers: bool = False,
         include_request: bool = False,
         include_response: bool = True,
-        transform: Optional[Callable[[FasthooksContext], Any]] = None,
-        owner_id_resolver: Optional[Callable[[Request], Optional[str]]] = None,
+        transform: Callable[[FasthooksContext], Any] | None = None,
+        owner_id_resolver: Callable[[Request], str | None] | None = None,
     ):
         def decorator(func):
             func_sig = inspect.signature(func)
@@ -85,7 +86,7 @@ class Fasthooks:
                     if request is None and (include_headers or include_request):
                         raise RuntimeError("Fasthooks requires 'request: Request' when headers or request body are included.")
 
-                    owner_id: Optional[str] = owner_id_override if owner_id_override is not None else self.owner_id
+                    owner_id: str | None = owner_id_override if owner_id_override is not None else self.owner_id
                     if owner_id_resolver is not None and request is not None:
                         resolved_owner = owner_id_resolver(request)
                         if resolved_owner is not None:

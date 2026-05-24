@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable, Literal, Optional
+from collections.abc import Iterable
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -10,8 +11,8 @@ class WebhookSubscription(BaseModel):
     event_name: str
     target_url: str
     auth_type: Literal["bearer", "none"] = "none"
-    auth_value: Optional[str] = None
-    metadata: Optional[dict[str, Any]] = Field(default_factory=dict)
+    auth_value: str | None = None
+    metadata: dict[str, Any] | None = Field(default_factory=dict)
 
 
 class StoredWebhookSubscription(WebhookSubscription):
@@ -29,12 +30,12 @@ class BaseStore(ABC):
         event_name: str,
         target_url: str,
         auth_type: Literal["bearer", "none"] = "none",
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         """
         Add a new webhook subscription.
-        
+
         Returns the subscription ID.
         """
 
@@ -53,13 +54,13 @@ class BaseStore(ABC):
     async def update_subscription(
         self,
         subscription_id: str,
-        target_url: Optional[str] = None,
-        auth_type: Optional[Literal["bearer", "none"]] = None,
-        auth_value: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        target_url: str | None = None,
+        auth_type: Literal["bearer", "none"] | None = None,
+        auth_value: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> bool:
         """Update a subscription. Returns True if found and updated."""
 
-    async def get_subscription(self, subscription_id: str) -> Optional[StoredWebhookSubscription]:
+    async def get_subscription(self, subscription_id: str) -> StoredWebhookSubscription | None:
         """Get a single subscription by ID. Optional default implementation."""
         raise NotImplementedError

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from fasthooks.stores.base_store import WebhookSubscription
 
@@ -29,6 +30,6 @@ class BaseDispatcher(ABC):
         """
         raise NotImplementedError
 
-    async def aclose(self) -> None:
+    async def aclose(self) -> None:  # noqa: B027
         """Optional cleanup hook. Override if needed."""
         pass

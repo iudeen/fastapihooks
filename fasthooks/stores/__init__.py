@@ -3,9 +3,8 @@ from .memory_store import MemoryStore
 
 __all__ = ["BaseStore", "WebhookSubscription", "StoredWebhookSubscription", "MemoryStore"]
 
-# Optional SQL store - only available if sqlalchemy is installed
 try:
-    from .sql_store import SQLStore
+    from .sql_store import SQLStore  # noqa: F401
     __all__.append("SQLStore")
 except ImportError:
     pass

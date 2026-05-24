@@ -5,10 +5,7 @@ description = "Fasthook is a webhook framework for FastAPI Applications"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
-
-[tool.setuptools.package-data]
-fasthooks = ["py.typed"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.128.0",
     "httpx>=0.28.1",
@@ -38,15 +35,19 @@ classifiers = [
     "Framework :: Pydantic :: 2",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
     "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
     "Topic :: Internet :: WWW/HTTP",
 ]
+
+[project.scripts]
+fasthooks = "fasthooks.worker.engine:main"
+
+[tool.setuptools.package-data]
+fasthooks = ["py.typed"]
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]
@@ -56,7 +57,6 @@ strict = true
 parallel = true
 data_file = "coverage/.coverage"
 source = [
-    "docs_src",
     "tests",
     "fasthooks"
 ]
@@ -70,6 +70,10 @@ sort = "-Cover"
 
 [tool.coverage.html]
 show_contexts = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
 
 [tool.ruff.lint]
 select = [
@@ -94,9 +98,9 @@ known-third-party = ["fastapi", "pydantic", "starlette"]
 [dependency-groups]
 dev = [
     "fastapi>=0.128.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
     "ruff>=0.14.14",
     "sqlalchemy[asyncio]>=2.0.46",
+    "zensical>=0.0.43",
 ]
-
-[project.scripts]
-fasthooks = "fasthooks.worker.engine:main"

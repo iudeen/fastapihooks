@@ -1,4 +1,5 @@
-from typing import Any, Optional
+from collections.abc import Callable, Coroutine
+from typing import Any
 
 from fasthooks.backends.base_backend import BaseBackend
 from fasthooks.stores.base_store import WebhookSubscription
@@ -6,15 +7,31 @@ from fasthooks.worker.dispatcher import WebhookDispatcher
 
 
 class BackgroundTaskBackend(BaseBackend):
-    def __init__(self, store=None, signing_secret: str = ""):
-        self.dispatcher = WebhookDispatcher(store=store, signing_secret=signing_secret)
+    def __init__(
+        self,
+        store=None,
+        signing_secret: str = "",
+        *,
+        max_retries: int = 3,
+        backoff_base: float = 1.0,
+        backoff_max: float = 60.0,
+        on_failure: Callable[..., Coroutine] | None = None,
+    ):
+        self.dispatcher = WebhookDispatcher(
+            store=store,
+            signing_secret=signing_secret,
+            max_retries=max_retries,
+            backoff_base=backoff_base,
+            backoff_max=backoff_max,
+            on_failure=on_failure,
+        )
 
     async def publish(
         self,
         event_name: str,
         payload: Any,
-        owner_id: Optional[str],
-        subscribers: Optional[list[WebhookSubscription]] = None,
+        owner_id: str | None,
+        subscribers: list[WebhookSubscription] | None = None,
     ):
         if subscribers:
             await self.dispatcher.broadcast_to_subscribers(payload=payload, subscribers=subscribers)
